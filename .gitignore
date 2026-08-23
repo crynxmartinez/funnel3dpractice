@@ -1,0 +1,10 @@
+# Source frame sequence — 139 MB of 1280x720 PNGs extracted from the product
+# video. Deliberately not tracked: the site serves the generated WebP tiers in
+# assets/frames/, and tools/build-frames.py regenerates those from this folder.
+# Drop the PNGs back in at this path if you need to re-run the build.
+Canon EOS R5 Mark II/
+
+# Editor / tooling
+.claude/
+.DS_Store
+Thumbs.db

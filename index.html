@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canon EOS R5 Mark II — Taken Apart</title>
+<meta name="description" content="A scroll-driven teardown of the Canon EOS R5 Mark II: 45MP stacked sensor, DIGIC X + Accelerator, 8K60 RAW, 30 fps. See every component, then see the price.">
+<link rel="preload" href="assets/poster.webp" as="image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#benefits">Skip the animation</a>
+
+<header class="topbar" data-topbar>
+  <span class="topbar__mark">EOS R5<sup>II</sup></span>
+  <nav class="topbar__nav">
+    <a href="#compare">vs R5</a>
+    <a href="#specs">Specs</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a class="btn btn--small btn--primary" href="#offer">From $4,299</a>
+</header>
+
+<!-- ============ HERO: pinned scroll teardown ============ -->
+<section class="teardown" data-teardown>
+  <div class="teardown__pin">
+    <canvas class="teardown__canvas" data-teardown-canvas
+            aria-label="Canon EOS R5 Mark II disassembling into an exploded view as the page scrolls"
+            role="img"></canvas>
+    <div class="teardown__scrim"></div>
+    <div class="teardown__beats" data-teardown-beats></div>
+    <div class="teardown__loader" data-teardown-progress
+         role="progressbar" aria-label="Loading frames" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+</section>
+
+<main>
+
+  <!-- ============ BENEFITS ============ -->
+  <section class="section" id="benefits">
+    <div class="wrap">
+      <p class="kicker reveal">What it actually changes</p>
+      <h2 class="h2 reveal">Three reasons this is a generation,<br>not a refresh.</h2>
+      <div class="benefits" data-benefits></div>
+    </div>
+  </section>
+
+  <!-- ============ USE CASES ============ -->
+  <section class="section section--alt" id="who">
+    <div class="wrap">
+      <p class="kicker reveal">Who it is for</p>
+      <h2 class="h2 reveal">Built for the shoots<br>you cannot repeat.</h2>
+      <div class="cases" data-cases></div>
+    </div>
+  </section>
+
+  <!-- ============ COMPARISON ============ -->
+  <section class="section" id="compare">
+    <div class="wrap">
+      <p class="kicker reveal">The upgrade question</p>
+      <h2 class="h2 reveal">R5 owners: here is the<br>honest difference.</h2>
+      <p class="lede reveal">If you shoot motion, this table is the whole argument. If you shoot
+        landscapes at base ISO, read the FAQ before you spend anything.</p>
+      <div class="table-scroll reveal" data-comparison></div>
+    </div>
+  </section>
+
+  <!-- ============ SPECS ============ -->
+  <section class="section section--alt" id="specs">
+    <div class="wrap">
+      <p class="kicker reveal">Full specification</p>
+      <h2 class="h2 reveal">Every number,<br>nothing hidden.</h2>
+      <div class="specs reveal" data-specs></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFER ============ -->
+  <section class="section section--offer" id="offer">
+    <div class="wrap">
+      <p class="kicker reveal">Configure yours</p>
+      <h2 class="h2 reveal">Two ways to start.</h2>
+      <div class="offers" data-offers></div>
+      <ul class="reassure reveal" data-reassure></ul>
+      <p class="finePrint reveal">Prices shown are Canon US launch pricing for reference in this
+        demo build and are not a live quote.</p>
+    </div>
+  </section>
+
+  <!-- ============ EMAIL CAPTURE (secondary) ============ -->
+  <section class="section section--capture" id="alerts">
+    <div class="wrap wrap--narrow">
+      <h2 class="h3 reveal">Not ready to spend $4,299?</h2>
+      <p class="lede reveal">Reasonable. Leave an email and we will tell you when the price moves,
+        when stock changes, or when the Mark III makes this one cheaper.</p>
+      <form class="capture" data-capture novalidate>
+        <label class="sr-only" for="email">Email address</label>
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+               placeholder="you@studio.com" required>
+        <button class="btn btn--primary" type="submit">Notify me</button>
+        <p class="capture__msg" data-capture-msg role="status" aria-live="polite"></p>
+      </form>
+      <p class="finePrint reveal">One email per price change. No newsletter, no sharing.</p>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <div class="wrap wrap--narrow">
+      <p class="kicker reveal">Before you buy</p>
+      <h2 class="h2 reveal">The questions people<br>actually ask.</h2>
+      <div class="faq reveal" data-faq></div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="section section--final">
+    <div class="wrap wrap--narrow center">
+      <h2 class="h2 reveal">You have seen every part.</h2>
+      <p class="lede reveal">45 megapixels, two processors, 8K60 RAW, 656 grams.</p>
+      <a class="btn btn--primary btn--large reveal" href="#offer">Configure from $4,299</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p class="footer__disclaimer">
+      <strong>Independent practice project.</strong> This page is a funnel-design exercise and is
+      not affiliated with, endorsed by, or operated by Canon. Product renders are Canon marketing
+      material used here for layout study only. Specifications are drawn from public sources; the
+      checkout, pricing and email capture are non-functional. Testimonial slots are marked as
+      placeholders and contain no real customer statements.
+    </p>
+    <p class="footer__meta">EOS R5 Mark II teardown funnel · built as a static page</p>
+  </div>
+</footer>
+
+<div class="stickybar" data-stickybar>
+  <div class="stickybar__price"><strong>$4,299</strong><span>body only</span></div>
+  <a class="btn btn--primary btn--small" href="#offer">Configure</a>
+</div>
+
+<script src="data/content.js"></script>
+<script src="js/teardown.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
