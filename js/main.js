@@ -217,7 +217,7 @@
   function initChrome() {
     var bar = mount('[data-stickybar]');
     var top = mount('[data-topbar]');
-    var hero = mount('[data-teardown]');
+    var hero = mount('[data-seq="teardown"]');
     if (!hero) return;
 
     function update() {

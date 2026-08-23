@@ -27,10 +27,10 @@ const BEATS = [
     align: 'left',
     eyebrow: '01 — The front end',
     title: 'The RF mount,<br>opened up.',
-    body: 'A 20 mm flange distance and a 12-pin connection let RF glass talk to the body fast enough to drive 8.5 stops of coordinated stabilisation. Shoot a half-second handheld and keep it.',
+    body: 'A 20 mm flange distance and a 12-pin connection. The short register is what lets RF optics be designed without compromise, and the wide bus is what lets glass and body talk fast enough to act as one instrument.',
     stats: [
-      ['8.5', 'stops IBIS + IS'],
-      ['5', 'axis in-body'],
+      ['20', 'mm flange distance'],
+      ['12', 'pin connection'],
     ],
   },
   {
@@ -42,16 +42,15 @@ const BEATS = [
     body: 'Magnesium alloy chassis, sealed seams, and a redesigned heat path — the reason this one keeps rolling where the original R5 tapped out.',
   },
   {
-    id: 'sensor',
+    id: 'stabiliser',
     from: 0.575, to: 0.72,
     align: 'left',
-    eyebrow: '03 — The sensor',
-    title: '45 megapixels,<br>read out sideways.',
-    body: 'Stacking the readout circuitry behind a back-illuminated sensor clears the light path and drains the frame far faster. Rolling shutter skew drops roughly 60% against the original R5 — propellers stay straight, strobes stay clean.',
+    eyebrow: '03 — The stabiliser',
+    title: 'The sensor floats<br>on its own cradle.',
+    body: 'That assembly is not bolted down. It rides a five-axis stabiliser that counter-moves against your hands, and when it coordinates with an RF lens’s own IS the pair are good for 8.5 stops. Handheld at half a second, sharp.',
     stats: [
-      ['8192', '× 5464 pixels'],
-      ['60%', 'less skew vs R5'],
-      ['1/32000', 'electronic shutter'],
+      ['8.5', 'stops IBIS + IS'],
+      ['5', 'axis sensor-shift'],
     ],
   },
   {
@@ -78,6 +77,64 @@ const BEATS = [
       ['5.76M', 'dot EVF @120fps'],
       ['656', 'g body only'],
       ['2', 'card slots'],
+    ],
+    cta: { label: 'See the price', href: '#offer' },
+  },
+];
+
+/* Mid-page dive: a single continuous push-in from the front-on hero, through
+   21 elements of glass, past the nine-blade iris, landing on the bare sensor.
+   This section owns the sensor argument — the teardown deliberately does not
+   repeat it, because here the sensor is the entire frame.
+   Copy sits in a bottom band: this imagery is radially symmetric and fills the
+   whole frame, so there is no empty corner to put a column in. */
+const LENS_BEATS = [
+  {
+    id: 'follow',
+    from: 0.00, to: 0.20,
+    align: 'left',
+    eyebrow: 'The light path',
+    title: 'Follow the light<br>all the way in.',
+    body: 'Every photograph is a negotiation between glass and silicon. Here is the whole journey, from the front element to the thing that finally records it.',
+    scrollHint: 'Scroll to travel inward',
+  },
+  {
+    id: 'glass',
+    from: 0.20, to: 0.48,
+    align: 'left',
+    eyebrow: '01 — The glass',
+    title: 'Twenty-one elements,<br>fifteen groups.',
+    body: 'Three ultra-low dispersion and three aspherical elements pull the colours back into register before they ever reach the sensor. Fluorine coating on the front and rear surfaces sheds water and fingerprints.',
+    stats: [
+      ['21', 'elements'],
+      ['15', 'groups'],
+      ['82', 'mm filter thread'],
+    ],
+  },
+  {
+    id: 'iris',
+    from: 0.48, to: 0.76,
+    align: 'left',
+    eyebrow: '02 — The aperture',
+    title: 'Nine blades,<br>held wide open.',
+    body: 'A rounded nine-blade diaphragm keeps out-of-focus highlights circular instead of polygonal. And f/2.8 holds from 24 mm all the way to 70 mm, so your exposure does not shift when you reframe.',
+    stats: [
+      ['f/2.8', 'constant'],
+      ['9', 'rounded blades'],
+      ['24-70', 'mm range'],
+    ],
+  },
+  {
+    id: 'silicon',
+    from: 0.76, to: 1.0,
+    align: 'left',
+    eyebrow: '03 — The sensor',
+    title: 'And this is<br>where it lands.',
+    body: 'Forty-five million pixels on a stacked, back-illuminated sensor. Stacking the readout circuitry behind the photosites clears the light path and drains the frame far faster — rolling shutter skew falls roughly 60% against the original R5. Propellers stay straight. Strobes stay clean.',
+    stats: [
+      ['8192', '× 5464 pixels'],
+      ['60%', 'less skew vs R5'],
+      ['1/32000', 'electronic shutter'],
     ],
     cta: { label: 'See the price', href: '#offer' },
   },
@@ -244,5 +301,5 @@ const OFFER = {
 };
 
 window.FUNNEL = {
-  BEATS, BENEFITS, USE_CASES, COMPARISON, SPECS, FAQS, OFFER,
+  BEATS, LENS_BEATS, BENEFITS, USE_CASES, COMPARISON, SPECS, FAQS, OFFER,
 };

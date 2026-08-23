@@ -162,32 +162,33 @@ a { color: inherit; }
 .topbar__nav a:hover { color: var(--text); }
 
 /* ============================================================
-   HERO — pinned teardown
+   PINNED SEQUENCES — shared
+   Used by both the hero teardown and the mid-page lens dive.
    700vh of travel over 240 frames: roughly 34 frames per
    viewport height, which keeps the disassembly weighty.
    ============================================================ */
 
-.teardown {
+.seq {
   position: relative;
   height: 700vh;
   background: var(--ink);
 }
 
-.teardown__pin {
+.seq__pin {
   position: sticky; top: 0;
   height: 100vh; height: 100svh;
   overflow: hidden;
 }
 
-.teardown__canvas {
+.seq__canvas {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   background: var(--ink);
 }
 
 /* Darkens the side the copy sits on, and deepens as the diagram
-   expands to fill the frame (--teardown-progress is set by JS). */
-.teardown__scrim {
+   expands to fill the frame (--seq-progress is set by JS). */
+.seq__scrim {
   position: absolute; inset: 0;
   pointer-events: none;
   background: linear-gradient(
@@ -197,10 +198,10 @@ a { color: inherit; }
     rgba(7, 7, 10, 0.28) 50%,
     rgba(7, 7, 10, 0) 68%
   );
-  opacity: calc(0.5 + var(--teardown-progress, 0) * 0.5);
+  opacity: calc(0.5 + var(--seq-progress, 0) * 0.5);
 }
 
-.teardown__beats { position: absolute; inset: 0; }
+.seq__beats { position: absolute; inset: 0; }
 
 .beat {
   position: absolute; inset: 0;
@@ -275,18 +276,54 @@ a { color: inherit; }
 }
 
 /* frame-load progress, only visible during the coarse pass */
-.teardown__loader {
+.seq__loader {
   position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
   background: rgba(255, 255, 255, 0.07);
   transition: opacity 0.6s 0.2s;
 }
-.teardown__loader::after {
+.seq__loader::after {
   content: ''; position: absolute; inset: 0 auto 0 0;
   width: var(--load, 0%);
   background: var(--accent);
   transition: width 0.3s linear;
 }
-.teardown.is-ready .teardown__loader { opacity: 0; }
+.seq.is-ready .seq__loader { opacity: 0; }
+
+/* ============================================================
+   MID-PAGE VARIANT — the lens dive
+   The teardown leaves the left third of frame empty, so its copy
+   sits in a column behind a side gradient. This sequence is
+   radially symmetric and fills the entire frame at every moment,
+   so a column would land on top of the iris. Copy therefore goes
+   in a bottom band behind a bottom-up scrim, which stays legible
+   across all four beats.
+   600vh over 240 frames — a little quicker than the hero, since
+   it is one continuous move rather than parts separating.
+   ============================================================ */
+
+.seq--lens { height: 600vh; }
+
+.seq--lens .seq__scrim {
+  background: linear-gradient(
+    0deg,
+    rgba(7, 7, 10, 0.97) 0%,
+    rgba(7, 7, 10, 0.9) 24%,
+    rgba(7, 7, 10, 0.5) 45%,
+    rgba(7, 7, 10, 0) 68%
+  );
+  /* Starts strong and deepens: the sensor at the end is the brightest
+     thing in the sequence, so the copy needs more ground under it. */
+  opacity: calc(0.74 + var(--seq-progress, 0) * 0.26);
+}
+
+.seq--lens .beat {
+  justify-content: flex-end;
+  padding-bottom: 4.5rem;
+}
+.seq--lens .beat > * { max-width: 40rem; }
+.seq--lens .beat__title { font-size: clamp(2.1rem, 4.4vw, 3.9rem); }
+.seq--lens .beat__body { max-width: 48ch; }
+.seq--lens .beat__stats { margin-bottom: 1.5rem; }
 
 /* ---------- sections ---------- */
 
@@ -592,11 +629,11 @@ a { color: inherit; }
    ============================================================ */
 
 @media (max-width: 768px) {
-  .teardown { height: 620vh; }
+  .seq { height: 620vh; }
 
-  .teardown__canvas { inset: 0 0 auto 0; height: 48vh; }
+  .seq__canvas { inset: 0 0 auto 0; height: 48vh; }
 
-  .teardown__scrim {
+  .seq__scrim {
     background: linear-gradient(
       180deg,
       rgba(7, 7, 10, 0.55) 0%,
@@ -606,12 +643,27 @@ a { color: inherit; }
     );
   }
 
-  .teardown__beats { top: 44vh; }
+  .seq__beats { top: 44vh; }
   .beat {
     justify-content: flex-start;
     padding: 1rem var(--gut) 4.5rem;
   }
   .beat--center { align-items: flex-start; text-align: left; }
+
+  /* .seq--lens .beat has higher specificity than the shared .beat rule
+     above, so flex-end must be undone explicitly here. */
+  .seq--lens { height: 520vh; }
+  .seq--lens .beat { justify-content: flex-start; padding-bottom: 4.5rem; }
+  .seq--lens .beat > * { max-width: none; }
+  .seq--lens .seq__scrim {
+    background: linear-gradient(
+      180deg,
+      rgba(7, 7, 10, 0.5) 0%,
+      rgba(7, 7, 10, 0) 24%,
+      rgba(7, 7, 10, 0.72) 42%,
+      var(--ink) 55%
+    );
+  }
   .beat__stats { gap: 1.5rem; }
   .beat__body { max-width: none; }
   .beat__hint { margin-top: 1.5rem; }
@@ -642,19 +694,19 @@ a { color: inherit; }
   }
 }
 
-.teardown.is-static { height: auto; }
-.teardown.is-static .teardown__pin { position: relative; height: auto; }
-.teardown.is-static .teardown__canvas {
+.seq.is-static { height: auto; }
+.seq.is-static .seq__pin { position: relative; height: auto; }
+.seq.is-static .seq__canvas {
   position: relative; inset: auto;
   width: 100%; height: min(62vh, 480px);
 }
-.teardown.is-static .teardown__scrim { display: none; }
-.teardown.is-static .teardown__loader { display: none; }
-.teardown.is-static .teardown__beats { position: relative; inset: auto; }
-.teardown.is-static .beat {
+.seq.is-static .seq__scrim { display: none; }
+.seq.is-static .seq__loader { display: none; }
+.seq.is-static .seq__beats { position: relative; inset: auto; }
+.seq.is-static .beat {
   position: relative; inset: auto;
   opacity: 1; visibility: visible; transform: none;
   padding: 3.5rem var(--gut);
   border-top: 1px solid var(--line);
 }
-.teardown.is-static .beat__hint { display: none; }
+.seq.is-static .beat__hint { display: none; }

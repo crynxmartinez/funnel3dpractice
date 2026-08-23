@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Canon EOS R5 Mark II — Taken Apart</title>
 <meta name="description" content="A scroll-driven teardown of the Canon EOS R5 Mark II: 45MP stacked sensor, DIGIC X + Accelerator, 8K60 RAW, 30 fps. See every component, then see the price.">
-<link rel="preload" href="assets/poster.webp" as="image">
+<link rel="preload" href="assets/poster-teardown.webp" as="image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -18,6 +18,7 @@
 <header class="topbar" data-topbar>
   <span class="topbar__mark">EOS R5<sup>II</sup></span>
   <nav class="topbar__nav">
+    <a href="#inside-the-lens">Inside</a>
     <a href="#compare">vs R5</a>
     <a href="#specs">Specs</a>
     <a href="#faq">FAQ</a>
@@ -26,14 +27,14 @@
 </header>
 
 <!-- ============ HERO: pinned scroll teardown ============ -->
-<section class="teardown" data-teardown>
-  <div class="teardown__pin">
-    <canvas class="teardown__canvas" data-teardown-canvas
+<section class="seq seq--teardown" data-seq="teardown">
+  <div class="seq__pin">
+    <canvas class="seq__canvas" data-seq-canvas
             aria-label="Canon EOS R5 Mark II disassembling into an exploded view as the page scrolls"
             role="img"></canvas>
-    <div class="teardown__scrim"></div>
-    <div class="teardown__beats" data-teardown-beats></div>
-    <div class="teardown__loader" data-teardown-progress
+    <div class="seq__scrim"></div>
+    <div class="seq__beats" data-seq-beats></div>
+    <div class="seq__loader" data-seq-progress
          role="progressbar" aria-label="Loading frames" aria-valuemin="0" aria-valuemax="100"></div>
   </div>
 </section>
@@ -55,6 +56,21 @@
       <p class="kicker reveal">Who it is for</p>
       <h2 class="h2 reveal">Built for the shoots<br>you cannot repeat.</h2>
       <div class="cases" data-cases></div>
+    </div>
+  </section>
+
+  <!-- ============ LENS DIVE: second pinned sequence ============ -->
+  <!-- Lazy-gated: none of these frames load until the reader is within about
+       1.5 viewports, so the initial page load is unaffected. -->
+  <section class="seq seq--lens" data-seq="lens" id="inside-the-lens">
+    <div class="seq__pin">
+      <canvas class="seq__canvas" data-seq-canvas
+              aria-label="The view travelling into the lens, through the aperture blades, ending on the bare image sensor"
+              role="img"></canvas>
+      <div class="seq__scrim"></div>
+      <div class="seq__beats" data-seq-beats></div>
+      <div class="seq__loader" data-seq-progress
+           role="progressbar" aria-label="Loading frames" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
   </section>
 
@@ -146,7 +162,7 @@
 </div>
 
 <script src="data/content.js"></script>
-<script src="js/teardown.js"></script>
+<script src="js/scrollsequence.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
