@@ -40,13 +40,15 @@
   position: relative;
   height: 700vh;
   background: #07070a;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  /* Not 100vw: that includes the scrollbar while the parent's 50% does not,
+     which overhangs by the scrollbar width and can scroll the page sideways.
+     Set the GHL row to full width with 0 padding and 100% bleeds correctly. */
+  width: 100%;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
                Helvetica, Arial, sans-serif;
   color: #f3f3f6;
 }
-#r5x-teardown * { box-sizing: border-box; }
+#r5x-teardown, #r5x-teardown * { box-sizing: border-box; }
 
 #r5x-teardown .r5x-pin {
   position: sticky; top: 0;

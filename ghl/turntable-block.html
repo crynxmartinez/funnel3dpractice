@@ -49,10 +49,12 @@
   padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 5.5rem);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
                Helvetica, Arial, sans-serif;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  /* Not 100vw: that includes the scrollbar while the parent's 50% does not,
+     which overhangs by the scrollbar width and can scroll the page sideways.
+     Set the GHL row to full width with 0 padding and 100% bleeds correctly. */
+  width: 100%;
 }
-#r5t-rotate * { box-sizing: border-box; }
+#r5t-rotate, #r5t-rotate * { box-sizing: border-box; }
 #r5t-rotate > * { max-width: 1200px; margin-inline: auto; }
 
 #r5t-rotate .r5t-kicker {

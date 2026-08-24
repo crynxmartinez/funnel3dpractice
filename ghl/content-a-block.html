@@ -1,0 +1,210 @@
+<!--
+  ============================================================
+  GHL BLOCK — "what it changes" + "who it's for"
+  ============================================================
+  Goes BETWEEN the teardown hero and the lens dive.
+
+  Paste into a Custom Code / HTML element. Self-contained, and
+  everything is prefixed r5c- and scoped under an ID so nothing
+  leaks into GHL's CSS.
+
+  The testimonial slots are deliberately marked [PLACEHOLDER].
+  Replace them with real, permissioned quotes before this goes
+  anywhere near a live audience — do not invent customer
+  statements.
+-->
+
+<section class="r5c" id="r5c-a">
+
+  <div class="r5c-wrap">
+    <p class="r5c-kicker">What it actually changes</p>
+    <h2 class="r5c-h2">Three reasons this is a generation,<br>not a refresh.</h2>
+
+    <div class="r5c-cards">
+      <article class="r5c-card">
+        <p class="r5c-card__kicker">For stills</p>
+        <h3 class="r5c-card__title">30 frames a second, and you see all of them.</h3>
+        <p class="r5c-card__body">Blackout-free electronic shutter at 30 fps with Pre-Continuous
+          capture — the camera buffers up to 15 frames before you finish pressing the button. The
+          moment you reacted too slowly to is already recorded.</p>
+        <ul class="r5c-facts">
+          <li>30 fps electronic</li><li>12 fps mechanical</li><li>Pre-Continuous shooting</li>
+        </ul>
+      </article>
+
+      <article class="r5c-card">
+        <p class="r5c-card__kicker">For video</p>
+        <h3 class="r5c-card__title">8K60 RAW, recorded internally.</h3>
+        <p class="r5c-card__body">Full-width 8K up to 59.94p in RAW, 4K up to 120p, and 4K60
+          oversampled from the full sensor. Canon Log 2 gives you the latitude to grade it properly
+          instead of rescuing it.</p>
+        <ul class="r5c-facts">
+          <li>8K 59.94p RAW</li><li>4K 120p</li><li>Canon Log 2 + HDR PQ</li>
+        </ul>
+      </article>
+
+      <article class="r5c-card">
+        <p class="r5c-card__kicker">For speed</p>
+        <h3 class="r5c-card__title">Focus that knows what a sport looks like.</h3>
+        <p class="r5c-card__body">Action Priority modes trained on football, basketball and
+          volleyball pick the player who matters. Register a face and Person Priority holds it
+          through a crowd.</p>
+        <ul class="r5c-facts">
+          <li>Dual Pixel CMOS AF II</li><li>Action Priority</li><li>Registered People Priority</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+
+  <div class="r5c-wrap r5c-wrap--alt" id="who">
+    <p class="r5c-kicker">Who it is for</p>
+    <h2 class="r5c-h2">Built for the shoots<br>you cannot repeat.</h2>
+
+    <div class="r5c-cases">
+      <article class="r5c-case">
+        <h3 class="r5c-case__title">Weddings &amp; events</h3>
+        <p class="r5c-case__body">Silent 30 fps through the vows, dual-slot redundancy for the files
+          you cannot reshoot, and clean high-ISO for receptions lit by a single bulb.</p>
+        <blockquote class="r5c-quote">
+          <p>[PLACEHOLDER — replace with a real, permissioned testimonial before publishing.]</p>
+          <cite>[Name, role]</cite>
+        </blockquote>
+      </article>
+
+      <article class="r5c-case">
+        <h3 class="r5c-case__title">Wildlife &amp; sport</h3>
+        <p class="r5c-case__body">Pre-Continuous capture for the takeoff you cannot anticipate,
+          5,850 AF points across the whole frame, and 45MP of room to crop hard.</p>
+        <blockquote class="r5c-quote">
+          <p>[PLACEHOLDER — replace with a real, permissioned testimonial before publishing.]</p>
+          <cite>[Name, role]</cite>
+        </blockquote>
+      </article>
+
+      <article class="r5c-case">
+        <h3 class="r5c-case__title">Commercial &amp; film</h3>
+        <p class="r5c-case__body">8K60 RAW internal, timecode support, and Canon Log 2 that cuts
+          against cinema bodies. A B-cam that does not look like a B-cam.</p>
+        <blockquote class="r5c-quote">
+          <p>[PLACEHOLDER — replace with a real, permissioned testimonial before publishing.]</p>
+          <cite>[Name, role]</cite>
+        </blockquote>
+      </article>
+    </div>
+  </div>
+
+</section>
+
+<style>
+#r5c-a {
+  --r5c-ink: #07070a;
+  --r5c-ink-2: #0b0b11;
+  --r5c-card: #14141d;
+  --r5c-line: rgba(255,255,255,.09);
+  --r5c-line-2: rgba(255,255,255,.16);
+  --r5c-text: #f3f3f6;
+  --r5c-dim: #9b9baa;
+  --r5c-dim-2: #6f6f7e;
+  --r5c-accent: #ff7a45;
+  --r5c-accent-dim: #ffb494;
+  --r5c-ease: cubic-bezier(.22,.7,.28,1);
+
+  background: var(--r5c-ink);
+  color: var(--r5c-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  /* Not 100vw: that includes the scrollbar while the parent's 50% does not,
+     which overhangs by the scrollbar width and can scroll the page sideways.
+     Set the GHL row to full width with 0 padding and 100% bleeds correctly. */
+  width: 100%;
+}
+#r5c-a, #r5c-a * { box-sizing: border-box; }
+
+#r5c-a .r5c-wrap {
+  padding: clamp(5rem, 11vw, 10rem) clamp(1.25rem, 5vw, 5.5rem);
+}
+#r5c-a .r5c-wrap > * { width: min(1200px, 100%); margin-inline: auto; }
+#r5c-a .r5c-wrap--alt { background: var(--r5c-ink-2); }
+
+#r5c-a .r5c-kicker {
+  margin: 0 0 1rem; font-size: .75rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--r5c-accent); font-weight: 600;
+}
+#r5c-a .r5c-h2 {
+  margin: 0 0 1.25rem; font-size: clamp(2rem, 4.4vw, 3.6rem);
+  line-height: 1.04; letter-spacing: -.03em; font-weight: 600; color: var(--r5c-text);
+}
+
+/* ---------- benefit cards ---------- */
+#r5c-a .r5c-cards {
+  display: grid; gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  margin-top: 3.5rem;
+}
+#r5c-a .r5c-card {
+  display: flex; flex-direction: column;
+  background: var(--r5c-card);
+  border: 1px solid var(--r5c-line);
+  border-radius: 18px;
+  padding: 2rem 1.75rem;
+  transition: border-color .3s, transform .3s var(--r5c-ease);
+}
+#r5c-a .r5c-card:hover { border-color: var(--r5c-line-2); transform: translateY(-3px); }
+#r5c-a .r5c-card__kicker {
+  margin: 0 0 1.1rem; font-size: .7rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--r5c-accent); font-weight: 600;
+}
+#r5c-a .r5c-card__title {
+  margin: 0 0 .9rem; font-size: 1.3rem; line-height: 1.2;
+  letter-spacing: -.02em; font-weight: 600;
+}
+#r5c-a .r5c-card__body {
+  margin: 0 0 1.6rem; font-size: .95rem; color: var(--r5c-dim);
+}
+#r5c-a .r5c-facts {
+  margin: auto 0 0; padding: 1.25rem 0 0; list-style: none;
+  border-top: 1px solid var(--r5c-line);
+  display: flex; flex-direction: column; gap: .5rem;
+}
+#r5c-a .r5c-facts li {
+  position: relative; padding-left: 1.1rem;
+  font-size: .85rem; color: var(--r5c-dim);
+}
+#r5c-a .r5c-facts li::before {
+  content: ''; position: absolute; left: 0; top: .55em;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--r5c-accent);
+}
+
+/* ---------- use cases ---------- */
+#r5c-a .r5c-cases {
+  display: grid; gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  margin-top: 3.5rem;
+}
+#r5c-a .r5c-case { padding: 2rem 0 0; border-top: 2px solid var(--r5c-line-2); }
+#r5c-a .r5c-case__title {
+  margin: 0 0 .9rem; font-size: 1.2rem; letter-spacing: -.02em; font-weight: 600;
+}
+#r5c-a .r5c-case__body {
+  margin: 0 0 1.75rem; font-size: .95rem; color: var(--r5c-dim);
+}
+/* Placeholder slots read as unfinished on purpose. */
+#r5c-a .r5c-quote {
+  margin: 0; padding: 1.25rem 1.25rem 1.1rem;
+  background: rgba(255,255,255,.03);
+  border-left: 2px dashed var(--r5c-accent-dim);
+  border-radius: 0 10px 10px 0;
+}
+#r5c-a .r5c-quote p {
+  margin: 0 0 .6rem; font-size: .88rem; font-style: italic; color: var(--r5c-dim);
+}
+#r5c-a .r5c-quote cite {
+  font-size: .78rem; color: var(--r5c-dim-2); font-style: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #r5c-a .r5c-card { transition: none; }
+  #r5c-a .r5c-card:hover { transform: none; }
+}
+</style>

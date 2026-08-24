@@ -1,0 +1,255 @@
+<!--
+  ============================================================
+  GHL BLOCK — R5 comparison table + full spec sheet
+  ============================================================
+  Goes BETWEEN the lens dive and the turntable.
+
+  Two sections in one paste:
+    1. #compare — the upgrade lever for existing R5 owners
+    2. #specs   — the full spec sheet as native <details>
+                  accordions, so keyboard and screen-reader
+                  support come free with no JS at all
+
+  The whole block needs zero JavaScript. The table scrolls
+  horizontally inside its own container on narrow screens, so
+  the page itself never scrolls sideways.
+
+  Prefixed r5c- and scoped under #r5c-b.
+-->
+
+<section class="r5c" id="r5c-b">
+
+  <div class="r5c-wrap" id="compare">
+    <p class="r5c-kicker">The upgrade question</p>
+    <h2 class="r5c-h2">R5 owners: here is the<br>honest difference.</h2>
+    <p class="r5c-lede">If you shoot motion, this table is the whole argument. If you shoot
+      landscapes at base ISO, read the FAQ before you spend anything.</p>
+
+    <div class="r5c-tablescroll">
+      <table class="r5c-table">
+        <caption class="r5c-sr">Canon EOS R5 compared with EOS R5 Mark II</caption>
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">EOS R5 (2020)</th>
+            <th scope="col" class="is-hero">EOS R5 Mark II</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Sensor</th><td>45MP CMOS</td><td class="is-hero">45MP stacked, back-illuminated</td></tr>
+          <tr><th scope="row">Processing</th><td>DIGIC X</td><td class="is-hero">DIGIC X + DIGIC Accelerator</td></tr>
+          <tr><th scope="row">Electronic burst</th><td>20 fps</td><td class="is-hero">30 fps, blackout-free</td></tr>
+          <tr><th scope="row">Pre-capture</th><td>Not available</td><td class="is-hero">Pre-Continuous, up to 15 frames</td></tr>
+          <tr><th scope="row">Rolling shutter</th><td>Baseline</td><td class="is-hero">~60% less skew</td></tr>
+          <tr><th scope="row">Max video</th><td>8K 29.97p</td><td class="is-hero">8K 59.94p RAW</td></tr>
+          <tr><th scope="row">High frame rate</th><td>4K 120p (cropped workflow)</td><td class="is-hero">4K 120p with sound</td></tr>
+          <tr><th scope="row">Eye Control AF</th><td>Not available</td><td class="is-hero">Yes</td></tr>
+          <tr><th scope="row">Subject detection</th><td>Face / animal / vehicle</td><td class="is-hero">Deep-learning, Action Priority</td></tr>
+          <tr><th scope="row">Stabilisation</th><td>Up to 8 stops</td><td class="is-hero">Up to 8.5 stops</td></tr>
+          <tr><th scope="row">Viewfinder</th><td>5.76M dots, 120 fps</td><td class="is-hero">5.76M dots, 120 fps, brighter panel</td></tr>
+          <tr><th scope="row">Thermal behaviour</th><td>Known 8K limits</td><td class="is-hero">Redesigned heat path, optional cooling grip</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="r5c-wrap r5c-wrap--alt" id="specs">
+    <p class="r5c-kicker">Full specification</p>
+    <h2 class="r5c-h2">Every number,<br>nothing hidden.</h2>
+
+    <div class="r5c-acc-group">
+      <details class="r5c-acc" open>
+        <summary class="r5c-acc__head"><span>Sensor &amp; image</span><i class="r5c-acc__icon"></i></summary>
+        <dl class="r5c-acc__body">
+          <div><dt>Sensor</dt><dd>36 × 24 mm stacked back-illuminated CMOS</dd></div>
+          <div><dt>Effective pixels</dt><dd>45.0 megapixels (8192 × 5464)</dd></div>
+          <div><dt>Processor</dt><dd>DIGIC X with DIGIC Accelerator</dd></div>
+          <div><dt>ISO (stills)</dt><dd>100–51,200, expandable to 50–102,400</dd></div>
+          <div><dt>In-camera tools</dt><dd>Neural network upscaling and noise reduction</dd></div>
+        </dl>
+      </details>
+
+      <details class="r5c-acc">
+        <summary class="r5c-acc__head"><span>Autofocus</span><i class="r5c-acc__icon"></i></summary>
+        <dl class="r5c-acc__body">
+          <div><dt>System</dt><dd>Dual Pixel CMOS AF II</dd></div>
+          <div><dt>Coverage</dt><dd>100% of the frame</dd></div>
+          <div><dt>Selectable points</dt><dd>5,850 for stills</dd></div>
+          <div><dt>Subject detection</dt><dd>People, animals, vehicles; Action Priority for team sport</dd></div>
+          <div><dt>Eye Control AF</dt><dd>Yes, with improved calibration</dd></div>
+        </dl>
+      </details>
+
+      <details class="r5c-acc">
+        <summary class="r5c-acc__head"><span>Shooting speed</span><i class="r5c-acc__icon"></i></summary>
+        <dl class="r5c-acc__body">
+          <div><dt>Electronic shutter</dt><dd>Up to 30 fps, blackout-free</dd></div>
+          <div><dt>Mechanical shutter</dt><dd>Up to 12 fps</dd></div>
+          <div><dt>Pre-Continuous</dt><dd>Up to 15 frames buffered before full press</dd></div>
+          <div><dt>Shutter range</dt><dd>30s–1/8000s mechanical; 30s–1/32000s electronic</dd></div>
+        </dl>
+      </details>
+
+      <details class="r5c-acc">
+        <summary class="r5c-acc__head"><span>Video</span><i class="r5c-acc__icon"></i></summary>
+        <dl class="r5c-acc__body">
+          <div><dt>8K</dt><dd>Up to 59.94p, RAW internal</dd></div>
+          <div><dt>4K</dt><dd>Up to 119.88p; 4K60 oversampled, SRAW available</dd></div>
+          <div><dt>Colour</dt><dd>Canon Log 2, Canon Log 3, HDR PQ</dd></div>
+          <div><dt>Depth</dt><dd>10-bit 4:2:2 internal</dd></div>
+        </dl>
+      </details>
+
+      <details class="r5c-acc">
+        <summary class="r5c-acc__head"><span>Stabilisation &amp; build</span><i class="r5c-acc__icon"></i></summary>
+        <dl class="r5c-acc__body">
+          <div><dt>IBIS</dt><dd>5-axis, up to 8.5 stops with coordinated IS</dd></div>
+          <div><dt>Body</dt><dd>Magnesium alloy, weather-sealed</dd></div>
+          <div><dt>Dimensions</dt><dd>138.4 × 98.4 × 88.4 mm</dd></div>
+          <div><dt>Weight</dt><dd>656 g body only; 746 g with battery and card</dd></div>
+        </dl>
+      </details>
+
+      <details class="r5c-acc">
+        <summary class="r5c-acc__head"><span>Viewfinder &amp; screen</span><i class="r5c-acc__icon"></i></summary>
+        <dl class="r5c-acc__body">
+          <div><dt>EVF</dt><dd>0.5-inch OLED, 5.76M dots, 120 fps, 0.76×</dd></div>
+          <div><dt>Monitor</dt><dd>3.2-inch vari-angle touchscreen, 2.1M dots</dd></div>
+        </dl>
+      </details>
+
+      <details class="r5c-acc">
+        <summary class="r5c-acc__head"><span>Storage &amp; power</span><i class="r5c-acc__icon"></i></summary>
+        <dl class="r5c-acc__body">
+          <div><dt>Card slots</dt><dd>CFexpress Type B + SDXC UHS-II</dd></div>
+          <div><dt>Battery</dt><dd>LP-E6P (LP-E6NH / LP-E6N compatible)</dd></div>
+          <div><dt>Battery life</dt><dd>Approx. 630 shots via LCD, 340 via EVF</dd></div>
+          <div><dt>Connectivity</dt><dd>Wi-Fi, Bluetooth, USB-C, HDMI, timecode</dd></div>
+        </dl>
+      </details>
+    </div>
+  </div>
+
+</section>
+
+<style>
+#r5c-b {
+  --r5c-ink: #07070a;
+  --r5c-ink-2: #0b0b11;
+  --r5c-ink-3: #12121a;
+  --r5c-line: rgba(255,255,255,.09);
+  --r5c-text: #f3f3f6;
+  --r5c-dim: #9b9baa;
+  --r5c-dim-2: #6f6f7e;
+  --r5c-accent: #ff7a45;
+  --r5c-accent-dim: #ffb494;
+  --r5c-ease: cubic-bezier(.22,.7,.28,1);
+
+  background: var(--r5c-ink);
+  color: var(--r5c-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  /* Not 100vw: that includes the scrollbar while the parent's 50% does not,
+     which overhangs by the scrollbar width and can scroll the page sideways.
+     Set the GHL row to full width with 0 padding and 100% bleeds correctly. */
+  width: 100%;
+}
+#r5c-b, #r5c-b * { box-sizing: border-box; }
+
+#r5c-b .r5c-sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+#r5c-b .r5c-wrap { padding: clamp(5rem, 11vw, 10rem) clamp(1.25rem, 5vw, 5.5rem); }
+#r5c-b .r5c-wrap > * { width: min(1200px, 100%); margin-inline: auto; }
+#r5c-b .r5c-wrap--alt { background: var(--r5c-ink-2); }
+
+#r5c-b .r5c-kicker {
+  margin: 0 0 1rem; font-size: .75rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--r5c-accent); font-weight: 600;
+}
+#r5c-b .r5c-h2 {
+  margin: 0 0 1.25rem; font-size: clamp(2rem, 4.4vw, 3.6rem);
+  line-height: 1.04; letter-spacing: -.03em; font-weight: 600;
+}
+#r5c-b .r5c-lede {
+  margin: 0 0 2rem; max-width: 46ch;
+  font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--r5c-dim);
+}
+
+/* ---------- comparison table ---------- */
+/* Scrolls inside its own container, so the PAGE never scrolls sideways. */
+#r5c-b .r5c-tablescroll {
+  margin-top: 3rem; overflow-x: auto;
+  border: 1px solid var(--r5c-line); border-radius: 16px;
+  -webkit-overflow-scrolling: touch;
+}
+#r5c-b .r5c-table {
+  width: 100%; min-width: 620px;
+  border-collapse: collapse; font-size: .92rem;
+}
+#r5c-b .r5c-table th, #r5c-b .r5c-table td {
+  padding: 1rem 1.25rem; text-align: left; vertical-align: top;
+  border-bottom: 1px solid var(--r5c-line);
+}
+#r5c-b .r5c-table thead th {
+  position: sticky; top: 0; background: var(--r5c-ink-3);
+  font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--r5c-dim); font-weight: 600; white-space: nowrap;
+}
+#r5c-b .r5c-table tbody th { width: 26%; font-weight: 500; color: var(--r5c-dim); }
+#r5c-b .r5c-table td { color: var(--r5c-dim); }
+#r5c-b .r5c-table .is-hero { color: var(--r5c-text); background: rgba(255,122,69,.055); }
+#r5c-b .r5c-table thead .is-hero { color: var(--r5c-accent); }
+#r5c-b .r5c-table tbody tr:last-child th,
+#r5c-b .r5c-table tbody tr:last-child td { border-bottom: 0; }
+
+/* ---------- accordions (native <details>, no JS) ---------- */
+#r5c-b .r5c-acc-group { margin-top: 3rem; }
+#r5c-b .r5c-acc { border-bottom: 1px solid var(--r5c-line); }
+#r5c-b .r5c-acc:first-child { border-top: 1px solid var(--r5c-line); }
+#r5c-b .r5c-acc__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+  padding: 1.4rem 0; cursor: pointer; list-style: none;
+  font-size: 1.02rem; font-weight: 500; letter-spacing: -.01em;
+  transition: color .2s;
+}
+#r5c-b .r5c-acc__head::-webkit-details-marker { display: none; }
+#r5c-b .r5c-acc__head:hover { color: var(--r5c-accent-dim); }
+/* CSS-only plus/cross toggle. */
+#r5c-b .r5c-acc__icon {
+  position: relative; flex: 0 0 auto; width: 16px; height: 16px;
+  transition: transform .3s var(--r5c-ease);
+}
+#r5c-b .r5c-acc__icon::before, #r5c-b .r5c-acc__icon::after {
+  content: ''; position: absolute; background: var(--r5c-dim);
+  transition: background-color .2s;
+}
+#r5c-b .r5c-acc__icon::before { left: 0; right: 0; top: 7.5px; height: 1.5px; }
+#r5c-b .r5c-acc__icon::after { top: 0; bottom: 0; left: 7.5px; width: 1.5px; }
+#r5c-b .r5c-acc[open] .r5c-acc__icon { transform: rotate(135deg); }
+#r5c-b .r5c-acc[open] .r5c-acc__icon::before,
+#r5c-b .r5c-acc[open] .r5c-acc__icon::after { background: var(--r5c-accent); }
+
+#r5c-b .r5c-acc__body { margin: 0; padding: 0 0 1.6rem; }
+#r5c-b .r5c-acc__body > div {
+  display: grid; grid-template-columns: 13rem 1fr; gap: 1.5rem;
+  padding: .6rem 0; border-top: 1px solid rgba(255,255,255,.045);
+}
+#r5c-b .r5c-acc__body > div:first-child { border-top: 0; }
+#r5c-b .r5c-acc__body dt { color: var(--r5c-dim-2); font-size: .88rem; }
+#r5c-b .r5c-acc__body dd { margin: 0; font-size: .92rem; }
+
+#r5c-b :focus-visible { outline: 2px solid var(--r5c-accent); outline-offset: 3px; }
+
+@media (max-width: 768px) {
+  #r5c-b .r5c-acc__body > div { grid-template-columns: 1fr; gap: .15rem; }
+  #r5c-b .r5c-table thead th { position: static; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #r5c-b .r5c-acc__icon { transition: none; }
+}
+</style>

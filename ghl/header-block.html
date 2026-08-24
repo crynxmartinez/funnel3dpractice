@@ -1,0 +1,167 @@
+<!--
+  ============================================================
+  GHL BLOCK — funnel header + sticky mobile CTA
+  ============================================================
+  Paste into a Custom Code / HTML element in the page's TOP row,
+  above the teardown hero. Both pieces position themselves, so
+  the page's footer code-injection area works too.
+
+  DELIBERATELY HAS NO NAV MENU. A funnel wants one path through
+  it; nav links are exits. The middle slot holds non-clickable
+  trust signals instead, which fill the space without giving
+  anyone somewhere else to go. There is exactly one link here
+  and it goes to the offer.
+
+  Contains:
+    1. A fixed top bar, transparent over the hero, solid once
+       you scroll past it.
+    2. A sticky bottom CTA bar that rises on mobile after the
+       hero, where most mobile conversions come from.
+
+  Set SOLID_AT_VH below to match your hero height.
+  Prefixed r5h- and scoped, so nothing leaks into GHL's CSS.
+-->
+
+<header class="r5h-bar" id="r5h-topbar">
+  <span class="r5h-mark">EOS R5<sup>II</sup></span>
+
+  <!-- Trust signals, not navigation. Plain spans on purpose — nothing here
+       should be clickable, because there is nowhere else to send people. -->
+  <ul class="r5h-trust">
+    <li>Free 2-day shipping</li>
+    <li>30-day returns</li>
+    <li>In stock</li>
+  </ul>
+
+  <a class="r5h-cta" href="#offer">From&nbsp;$4,299</a>
+</header>
+
+<div class="r5h-sticky" id="r5h-stickybar">
+  <div class="r5h-sticky__price"><strong>$4,299</strong><span>body only</span></div>
+  <a class="r5h-sticky__cta" href="#offer">Configure</a>
+</div>
+
+<style>
+#r5h-topbar, #r5h-stickybar {
+  --r5h-text: #f3f3f6;
+  --r5h-dim: #9b9baa;
+  --r5h-line: rgba(255,255,255,.09);
+  --r5h-accent: #ff7a45;
+  --r5h-accent-ink: #1c0b03;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Helvetica, Arial, sans-serif;
+  line-height: 1.4;
+}
+#r5h-topbar, #r5h-topbar *,
+#r5h-stickybar, #r5h-stickybar * { box-sizing: border-box; }
+
+/* ---------- fixed top bar ---------- */
+#r5h-topbar {
+  position: fixed; inset: 0 0 auto 0; z-index: 9000;
+  display: flex; align-items: center; gap: clamp(1rem, 3vw, 2.5rem);
+  padding: .9rem clamp(1.25rem, 5vw, 5.5rem);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  color: var(--r5h-text);
+  transition: background-color .35s, border-color .35s, backdrop-filter .35s;
+}
+#r5h-topbar.is-solid {
+  background: rgba(7,7,10,.78);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--r5h-line);
+}
+#r5h-topbar .r5h-mark {
+  font-weight: 700; font-size: 1.05rem; letter-spacing: -.02em;
+  white-space: nowrap;
+}
+#r5h-topbar .r5h-mark sup { font-size: .6em; margin-left: 1px; }
+
+#r5h-topbar .r5h-trust {
+  display: flex; align-items: center; gap: clamp(.9rem, 2.5vw, 1.8rem);
+  margin: 0 auto 0 0; padding: 0; list-style: none;
+}
+#r5h-topbar .r5h-trust li {
+  position: relative; padding-left: 1rem;
+  font-size: .8rem; color: var(--r5h-dim); white-space: nowrap;
+}
+#r5h-topbar .r5h-trust li::before {
+  content: ''; position: absolute; left: 0; top: .55em;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--r5h-accent);
+}
+
+#r5h-topbar .r5h-cta {
+  display: inline-flex; align-items: center; flex: 0 0 auto;
+  padding: .6rem 1.15rem; border-radius: 999px;
+  background: var(--r5h-accent); color: var(--r5h-accent-ink);
+  font-weight: 600; font-size: .85rem; text-decoration: none;
+  white-space: nowrap;
+  transition: transform .25s, background-color .25s;
+}
+#r5h-topbar .r5h-cta:hover { transform: translateY(-2px); background: #ff8d5e; }
+
+/* ---------- sticky bottom CTA (mobile) ---------- */
+#r5h-stickybar {
+  position: fixed; inset: auto 0 0 0; z-index: 9000;
+  display: none; align-items: center; gap: 1rem;
+  padding: .75rem clamp(1.25rem, 5vw, 5.5rem);
+  padding-bottom: max(.75rem, env(safe-area-inset-bottom));
+  background: rgba(11,11,17,.92);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--r5h-line);
+  color: var(--r5h-text);
+  transform: translateY(110%);
+  transition: transform .4s cubic-bezier(.22,.7,.28,1);
+}
+#r5h-stickybar.is-up { transform: none; }
+#r5h-stickybar .r5h-sticky__price { margin-right: auto; line-height: 1.2; }
+#r5h-stickybar .r5h-sticky__price strong { display: block; font-size: 1.05rem; }
+#r5h-stickybar .r5h-sticky__price span { font-size: .75rem; color: var(--r5h-dim); }
+#r5h-stickybar .r5h-sticky__cta {
+  display: inline-flex; align-items: center;
+  padding: .6rem 1.15rem; border-radius: 999px;
+  background: var(--r5h-accent); color: var(--r5h-accent-ink);
+  font-weight: 600; font-size: .85rem; text-decoration: none;
+}
+
+/* Trust signals are the first thing to go when space runs out — the mark and
+   the CTA are what matter. */
+@media (max-width: 900px) {
+  #r5h-topbar .r5h-trust li:nth-child(n+3) { display: none; }
+}
+@media (max-width: 700px) {
+  #r5h-topbar .r5h-trust { display: none; }
+  #r5h-topbar .r5h-mark { margin-right: auto; }
+}
+@media (max-width: 768px) {
+  #r5h-stickybar { display: flex; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #r5h-topbar, #r5h-stickybar, #r5h-topbar .r5h-cta { transition: none; }
+  #r5h-topbar .r5h-cta:hover { transform: none; }
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  /* How far down the page the sticky CTA rises, in viewport heights. The
+     teardown hero is 700vh, so 6.5 lands just before it ends. Lower this if
+     your hero is shorter, or set it to 1 if there is no tall hero at all. */
+  var SOLID_AT_VH = 6.5;
+
+  var bar = document.getElementById('r5h-topbar');
+  var sticky = document.getElementById('r5h-stickybar');
+
+  function update() {
+    var y = window.scrollY || window.pageYOffset;
+    if (bar) bar.classList.toggle('is-solid', y > window.innerHeight * 0.6);
+    if (sticky) sticky.classList.toggle('is-up', y > window.innerHeight * SOLID_AT_VH);
+  }
+
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  update();
+})();
+</script>

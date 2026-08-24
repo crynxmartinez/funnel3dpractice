@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a local test page that mimics GoHighLevel's markup around the blocks.
+"""Assemble every GHL paste block into one page, in real funnel order.
 
     python ghl/make-test-harness.py
     python -m http.server 8123
@@ -22,46 +22,47 @@ OUT = HERE / "_test-harness.html"
 SHELL = """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GHL simulation harness</title>
+<title>GHL simulation harness — full funnel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-  body {{ margin:0; background:#0b0b11; color:#eee;
-         font-family:-apple-system,'Segoe UI',Roboto,sans-serif; }}
-  /* Deliberately hostile, exactly like a GHL row. */
+  body {{ margin:0; background:#07070a; color:#eee;
+         font-family:Inter,-apple-system,'Segoe UI',Roboto,sans-serif; }}
+  /* Deliberately hostile, exactly like a GHL row: nested flex with
+     overflow:hidden, which silently kills position:sticky. */
   .ghl-section {{ display:flex; flex-direction:column; }}
   .ghl-row {{ display:flex; width:100%; overflow:hidden; }}
   .ghl-col {{ display:flex; flex-direction:column; width:100%; }}
-  .filler {{ padding:6rem 2rem; max-width:900px; margin:0 auto; line-height:1.7; }}
-  code {{ background:#1a1a22; padding:.15em .4em; border-radius:4px; }}
-</style></head><body>
+</style></head><body id="top">
 
-<div class="filler">
-  <h1>GHL simulation harness</h1>
-  <p>All three blocks below sit inside <code>overflow:hidden</code> flex rows, as
-  they would in GoHighLevel. The two pinned blocks should each log a warning and
-  switch to fixed positioning; their pins must still hold at the top of the
-  viewport.</p>
-</div>
+<div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
+{header}
+</div></div></div>
 
 <div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
 {teardown}
 </div></div></div>
 
-<div class="filler"><p>Spacer between the two blocks.</p></div>
+<div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
+{content_a}
+</div></div></div>
 
 <div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
 {lens}
 </div></div></div>
 
-<div class="filler"><p>Spacer between the lens dive and the turntable.</p></div>
+<div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
+{content_b}
+</div></div></div>
 
 <div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
 {turntable}
 </div></div></div>
 
-<div class="filler" id="offer">
-  <h2>Offer section</h2>
-  <p>The turntable's CTA target. End of harness.</p>
-</div>
+<div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
+{content_c}
+</div></div></div>
+
 </body></html>
 """
 
@@ -70,9 +71,13 @@ def main():
     read = lambda n: (HERE / n).read_text(encoding="utf-8")
     OUT.write_text(
         SHELL.format(
+            header=read("header-block.html"),
             teardown=read("teardown-block.html"),
+            content_a=read("content-a-block.html"),
             lens=read("lens-block.html"),
+            content_b=read("content-b-block.html"),
             turntable=read("turntable-block.html"),
+            content_c=read("content-c-block.html"),
         ),
         encoding="utf-8",
     )

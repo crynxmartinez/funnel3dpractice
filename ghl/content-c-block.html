@@ -1,0 +1,429 @@
+<!--
+  ============================================================
+  GHL BLOCK — offer, email capture, FAQ, final CTA, footer
+  ============================================================
+  Goes AFTER the turntable. This is the whole bottom of the
+  funnel in one paste.
+
+  >>> TWO THINGS TO WIRE UP <<<
+
+  1. THE BUY BUTTONS. They are inert on purpose. In GHL you
+     have two options:
+       (a) Delete the <button data-r5c-buy> elements and drop a
+           native GHL product/order-form element into this row,
+           which is the sane choice — GHL handles payments,
+           order bumps and receipts for you.
+       (b) Point them at your checkout URL by turning each into
+           an <a href="...">.
+     Leaving them inert on a live page means visitors click and
+     nothing happens, so do one or the other.
+
+  2. THE EMAIL FORM. It validates client-side and posts nowhere.
+     Replace the whole <form> with a native GHL form element so
+     submissions land on a contact record and can trigger a
+     workflow. That is the entire reason to build this in GHL
+     rather than as a static page — do not reimplement it here.
+
+  The pricing shown is Canon US launch pricing for reference.
+  Update it, or remove the figures, before running traffic.
+-->
+
+<section class="r5c" id="r5c-c">
+
+  <!-- ============ OFFER ============ -->
+  <div class="r5c-wrap r5c-wrap--alt" id="offer">
+    <p class="r5c-kicker">Configure yours</p>
+    <h2 class="r5c-h2">Two ways to start.</h2>
+
+    <div class="r5c-offers">
+      <article class="r5c-offer">
+        <h3 class="r5c-offer__name">EOS R5 Mark II — Body only</h3>
+        <p class="r5c-offer__price">$4,299</p>
+        <p class="r5c-offer__note">For photographers who already own RF glass.</p>
+        <ul class="r5c-inc">
+          <li>Body, battery, charger, strap</li>
+          <li>1-year limited warranty</li>
+          <li>Free 2-day shipping</li>
+        </ul>
+        <button class="r5c-btn r5c-btn--block" type="button" data-r5c-buy>Add to cart</button>
+      </article>
+
+      <article class="r5c-offer r5c-offer--featured">
+        <span class="r5c-badge">Most popular</span>
+        <h3 class="r5c-offer__name">EOS R5 Mark II + RF 24-105mm f/4L IS USM</h3>
+        <p class="r5c-offer__price">$5,399</p>
+        <p class="r5c-offer__note">Saves $400 against buying the lens separately.</p>
+        <ul class="r5c-inc">
+          <li>Everything in body only</li>
+          <li>RF 24-105mm f/4L IS USM</li>
+          <li>Free 2-day shipping</li>
+        </ul>
+        <button class="r5c-btn r5c-btn--block" type="button" data-r5c-buy>Add to cart</button>
+      </article>
+    </div>
+
+    <ul class="r5c-reassure">
+      <li><strong>30-day returns</strong><span>Shoot a full job with it. Send it back if it is not right.</span></li>
+      <li><strong>1-year warranty</strong><span>Canon limited warranty, extendable at checkout.</span></li>
+      <li><strong>In stock</strong><span>Ships next business day.</span></li>
+    </ul>
+
+    <p class="r5c-fine">Prices shown are Canon US launch pricing for reference in this demo build
+      and are not a live quote.</p>
+  </div>
+
+  <!-- ============ EMAIL CAPTURE (secondary) ============ -->
+  <div class="r5c-wrap" id="alerts">
+    <div class="r5c-narrow">
+      <h2 class="r5c-h3">Not ready to spend $4,299?</h2>
+      <p class="r5c-lede">Reasonable. Leave an email and we will tell you when the price moves,
+        when stock changes, or when the Mark III makes this one cheaper.</p>
+
+      <form class="r5c-capture" data-r5c-capture novalidate>
+        <label class="r5c-sr" for="r5c-email">Email address</label>
+        <input id="r5c-email" name="email" type="email" inputmode="email"
+               autocomplete="email" placeholder="you@studio.com" required>
+        <button class="r5c-btn" type="submit">Notify me</button>
+        <p class="r5c-capture__msg" data-r5c-msg role="status" aria-live="polite"></p>
+      </form>
+
+      <p class="r5c-fine">One email per price change. No newsletter, no sharing.</p>
+    </div>
+  </div>
+
+  <!-- ============ FAQ ============ -->
+  <div class="r5c-wrap r5c-wrap--alt" id="faq">
+    <div class="r5c-narrow">
+      <p class="r5c-kicker">Before you buy</p>
+      <h2 class="r5c-h2">The questions people<br>actually ask.</h2>
+
+      <div class="r5c-acc-group">
+        <details class="r5c-acc">
+          <summary class="r5c-acc__head"><span>Does it still overheat like the original R5?</span><i class="r5c-acc__icon"></i></summary>
+          <div class="r5c-acc__prose"><p>Not in the same way. The heat path was redesigned around
+            the stacked sensor and the recording limits are substantially longer, particularly in 4K.
+            Sustained 8K in a hot room is still demanding — if that is your daily workload, the
+            optional cooling grip is the honest answer rather than a nice-to-have.</p></div>
+        </details>
+
+        <details class="r5c-acc">
+          <summary class="r5c-acc__head"><span>I already own an R5. Is this actually worth the upgrade?</span><i class="r5c-acc__icon"></i></summary>
+          <div class="r5c-acc__prose"><p>It depends entirely on whether you shoot motion. If you do
+            — sport, wildlife, events, anything fast — the stacked sensor, 30 fps, Pre-Continuous
+            capture and the new AF are a genuine generational jump. If you mostly shoot landscapes,
+            portraits or studio work at base ISO, your existing R5 produces very similar files and
+            the upgrade is difficult to justify.</p></div>
+        </details>
+
+        <details class="r5c-acc">
+          <summary class="r5c-acc__head"><span>Do I have to buy CFexpress cards?</span><i class="r5c-acc__icon"></i></summary>
+          <div class="r5c-acc__prose"><p>For 8K RAW and the fastest burst depths, yes — budget for a
+            CFexpress Type B card on top of the body. For 4K and normal stills work the SD UHS-II
+            slot is fine. Worth pricing in before you commit, because it is a real added cost people
+            forget.</p></div>
+        </details>
+
+        <details class="r5c-acc">
+          <summary class="r5c-acc__head"><span>Will my existing EF lenses work?</span><i class="r5c-acc__icon"></i></summary>
+          <div class="r5c-acc__prose"><p>Yes, through a Canon EF-EOS R adapter, with full autofocus
+            and stabilisation. You lose nothing optically. Native RF glass is what unlocks the full
+            8.5 stops of coordinated stabilisation.</p></div>
+        </details>
+
+        <details class="r5c-acc">
+          <summary class="r5c-acc__head"><span>How does it compare to a Sony a1 II or Nikon Z8?</span><i class="r5c-acc__icon"></i></summary>
+          <div class="r5c-acc__prose"><p>All three are excellent and the sensible deciding factor is
+            usually glass and ergonomics rather than the spec sheet. The R5 Mark II’s distinctive
+            advantages are Eye Control AF and 8K60 RAW internal; if you already own RF lenses the
+            decision largely makes itself.</p></div>
+        </details>
+
+        <details class="r5c-acc">
+          <summary class="r5c-acc__head"><span>What is in the box?</span><i class="r5c-acc__icon"></i></summary>
+          <div class="r5c-acc__prose"><p>Body, LP-E6P battery, charger, strap, and cables. Lenses,
+            cards and the cooling grip are sold separately — configure them in the section
+            above.</p></div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FINAL CTA ============ -->
+  <div class="r5c-wrap r5c-wrap--final">
+    <div class="r5c-narrow r5c-center">
+      <h2 class="r5c-h2">You have seen every part.</h2>
+      <p class="r5c-lede">45 megapixels, two processors, 8K60 RAW, 656 grams.</p>
+      <a class="r5c-btn r5c-btn--large" href="#offer">Configure from $4,299</a>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="r5c-footer">
+    <div class="r5c-footer__inner">
+      <p class="r5c-disclaimer">
+        <strong>Independent practice project.</strong> This page is a funnel-design exercise and is
+        not affiliated with, endorsed by, or operated by Canon. Product renders are Canon marketing
+        material used here for layout study only. Specifications are drawn from public sources; the
+        checkout, pricing and email capture are non-functional. Testimonial slots are marked as
+        placeholders and contain no real customer statements.
+      </p>
+      <p class="r5c-footer__meta">EOS R5 Mark II funnel · built as a static page</p>
+    </div>
+  </footer>
+
+</section>
+
+<style>
+#r5c-c {
+  --r5c-ink: #07070a;
+  --r5c-ink-2: #0b0b11;
+  --r5c-ink-3: #12121a;
+  --r5c-card: #14141d;
+  --r5c-line: rgba(255,255,255,.09);
+  --r5c-line-2: rgba(255,255,255,.16);
+  --r5c-text: #f3f3f6;
+  --r5c-dim: #9b9baa;
+  --r5c-dim-2: #6f6f7e;
+  --r5c-accent: #ff7a45;
+  --r5c-accent-dim: #ffb494;
+  --r5c-accent-ink: #1c0b03;
+  --r5c-ease: cubic-bezier(.22,.7,.28,1);
+
+  background: var(--r5c-ink);
+  color: var(--r5c-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  /* Not 100vw: that includes the scrollbar while the parent's 50% does not,
+     which overhangs by the scrollbar width and can scroll the page sideways.
+     Set the GHL row to full width with 0 padding and 100% bleeds correctly. */
+  width: 100%;
+}
+#r5c-c, #r5c-c * { box-sizing: border-box; }
+
+#r5c-c .r5c-sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+#r5c-c .r5c-wrap { padding: clamp(5rem, 11vw, 10rem) clamp(1.25rem, 5vw, 5.5rem); }
+#r5c-c .r5c-wrap > * { width: min(1200px, 100%); margin-inline: auto; }
+#r5c-c .r5c-wrap--alt { background: var(--r5c-ink-2); }
+#r5c-c .r5c-wrap--final { padding-block: clamp(6rem, 13vw, 12rem); }
+#r5c-c .r5c-narrow { width: min(760px, 100%); margin-inline: auto; }
+#r5c-c .r5c-center { text-align: center; }
+#r5c-c .r5c-center .r5c-lede { margin-inline: auto; }
+
+#r5c-c .r5c-kicker {
+  margin: 0 0 1rem; font-size: .75rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--r5c-accent); font-weight: 600;
+}
+#r5c-c .r5c-h2 {
+  margin: 0 0 1.25rem; font-size: clamp(2rem, 4.4vw, 3.6rem);
+  line-height: 1.04; letter-spacing: -.03em; font-weight: 600;
+}
+#r5c-c .r5c-h3 {
+  margin: 0 0 1rem; font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.1; letter-spacing: -.02em; font-weight: 600;
+}
+#r5c-c .r5c-lede {
+  margin: 0 0 2rem; max-width: 46ch;
+  font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--r5c-dim);
+}
+#r5c-c .r5c-fine {
+  margin: 2rem 0 0; max-width: 60ch;
+  font-size: .8rem; line-height: 1.6; color: var(--r5c-dim-2);
+}
+
+/* ---------- buttons ---------- */
+#r5c-c .r5c-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .95rem 1.7rem; border: 1px solid transparent; border-radius: 999px;
+  background: var(--r5c-accent); color: var(--r5c-accent-ink);
+  font: inherit; font-weight: 600; font-size: .95rem; letter-spacing: -.01em;
+  text-decoration: none; cursor: pointer;
+  transition: transform .25s var(--r5c-ease), background-color .25s, opacity .25s;
+}
+#r5c-c .r5c-btn:hover { transform: translateY(-2px); background: #ff8d5e; }
+#r5c-c .r5c-btn:active { transform: translateY(0); }
+#r5c-c .r5c-btn:disabled { opacity: .65; cursor: default; transform: none; }
+#r5c-c .r5c-btn--block { width: 100%; }
+#r5c-c .r5c-btn--large { padding: 1.15rem 2.4rem; font-size: 1.05rem; }
+
+/* ---------- offers ---------- */
+#r5c-c .r5c-offers {
+  display: grid; gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin-top: 3.5rem;
+}
+#r5c-c .r5c-offer {
+  position: relative; display: flex; flex-direction: column;
+  padding: 2.25rem 2rem;
+  background: var(--r5c-card);
+  border: 1px solid var(--r5c-line); border-radius: 20px;
+}
+#r5c-c .r5c-offer--featured {
+  border-color: rgba(255,122,69,.45);
+  background: linear-gradient(180deg, rgba(255,122,69,.07), var(--r5c-card) 45%);
+}
+#r5c-c .r5c-badge {
+  position: absolute; top: -.7rem; left: 2rem;
+  padding: .3rem .7rem; border-radius: 999px;
+  background: var(--r5c-accent); color: var(--r5c-accent-ink);
+  font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+#r5c-c .r5c-offer__name {
+  margin: 0 0 1.25rem; font-size: 1.05rem; font-weight: 600; letter-spacing: -.015em;
+}
+#r5c-c .r5c-offer__price {
+  margin: 0 0 .4rem; font-size: clamp(2.4rem, 4vw, 3rem);
+  font-weight: 600; letter-spacing: -.04em; line-height: 1;
+}
+#r5c-c .r5c-offer__note { margin: 0 0 1.6rem; font-size: .9rem; color: var(--r5c-dim); }
+#r5c-c .r5c-inc {
+  margin: 0 0 2rem; padding: 1.4rem 0 0; list-style: none;
+  border-top: 1px solid var(--r5c-line);
+  display: flex; flex-direction: column; gap: .6rem;
+}
+#r5c-c .r5c-inc li {
+  position: relative; padding-left: 1.4rem;
+  font-size: .88rem; color: var(--r5c-dim);
+}
+#r5c-c .r5c-inc li::before {
+  content: '✓'; position: absolute; left: 0; top: -1px;
+  color: var(--r5c-accent); font-size: .85rem;
+}
+#r5c-c .r5c-offer .r5c-btn { margin-top: auto; }
+
+#r5c-c .r5c-reassure {
+  display: grid; gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin: 3rem 0 0; padding: 2.25rem 0 0; list-style: none;
+  border-top: 1px solid var(--r5c-line);
+}
+#r5c-c .r5c-reassure strong { display: block; font-size: .95rem; margin-bottom: .3rem; }
+#r5c-c .r5c-reassure span { font-size: .86rem; color: var(--r5c-dim); }
+
+/* ---------- email capture ---------- */
+#r5c-c .r5c-capture { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+#r5c-c .r5c-capture input {
+  flex: 1 1 16rem; padding: .95rem 1.25rem;
+  background: var(--r5c-ink-3);
+  border: 1px solid var(--r5c-line-2); border-radius: 999px;
+  color: var(--r5c-text); font: inherit; font-size: .95rem;
+  transition: border-color .25s;
+}
+#r5c-c .r5c-capture input::placeholder { color: var(--r5c-dim-2); }
+#r5c-c .r5c-capture input:focus { border-color: var(--r5c-accent); outline: none; }
+#r5c-c .r5c-capture.is-invalid input { border-color: #ff5a5a; }
+#r5c-c .r5c-capture__msg {
+  flex: 1 1 100%; margin: .25rem 0 0; min-height: 1.2em;
+  font-size: .85rem; color: var(--r5c-dim);
+}
+#r5c-c .r5c-capture.is-invalid .r5c-capture__msg { color: #ff8a8a; }
+#r5c-c .r5c-capture.is-done .r5c-capture__msg { color: var(--r5c-accent-dim); }
+
+/* ---------- accordions (native <details>, no JS) ---------- */
+#r5c-c .r5c-acc-group { margin-top: 3rem; }
+#r5c-c .r5c-acc { border-bottom: 1px solid var(--r5c-line); }
+#r5c-c .r5c-acc:first-child { border-top: 1px solid var(--r5c-line); }
+#r5c-c .r5c-acc__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+  padding: 1.4rem 0; cursor: pointer; list-style: none;
+  font-size: 1.02rem; font-weight: 500; letter-spacing: -.01em;
+  transition: color .2s;
+}
+#r5c-c .r5c-acc__head::-webkit-details-marker { display: none; }
+#r5c-c .r5c-acc__head:hover { color: var(--r5c-accent-dim); }
+#r5c-c .r5c-acc__icon {
+  position: relative; flex: 0 0 auto; width: 16px; height: 16px;
+  transition: transform .3s var(--r5c-ease);
+}
+#r5c-c .r5c-acc__icon::before, #r5c-c .r5c-acc__icon::after {
+  content: ''; position: absolute; background: var(--r5c-dim);
+  transition: background-color .2s;
+}
+#r5c-c .r5c-acc__icon::before { left: 0; right: 0; top: 7.5px; height: 1.5px; }
+#r5c-c .r5c-acc__icon::after { top: 0; bottom: 0; left: 7.5px; width: 1.5px; }
+#r5c-c .r5c-acc[open] .r5c-acc__icon { transform: rotate(135deg); }
+#r5c-c .r5c-acc[open] .r5c-acc__icon::before,
+#r5c-c .r5c-acc[open] .r5c-acc__icon::after { background: var(--r5c-accent); }
+#r5c-c .r5c-acc__prose { padding: 0 0 1.6rem; }
+#r5c-c .r5c-acc__prose p {
+  margin: 0; max-width: 62ch; font-size: .95rem; color: var(--r5c-dim);
+}
+
+/* ---------- footer ---------- */
+#r5c-c .r5c-footer {
+  padding: 4rem clamp(1.25rem, 5vw, 5.5rem) 5rem;
+  background: var(--r5c-ink-2);
+  border-top: 1px solid var(--r5c-line);
+}
+#r5c-c .r5c-footer__inner { width: min(1200px, 100%); margin-inline: auto; }
+#r5c-c .r5c-disclaimer {
+  margin: 0 0 1.5rem; max-width: 72ch;
+  font-size: .82rem; line-height: 1.7; color: var(--r5c-dim-2);
+}
+#r5c-c .r5c-disclaimer strong { color: var(--r5c-dim); }
+#r5c-c .r5c-footer__meta { margin: 0; font-size: .78rem; color: var(--r5c-dim-2); }
+
+#r5c-c :focus-visible { outline: 2px solid var(--r5c-accent); outline-offset: 3px; }
+
+@media (max-width: 768px) {
+  /* Clear the sticky mobile CTA bar from the header block. */
+  #r5c-c .r5c-footer { padding-bottom: 7rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #r5c-c .r5c-btn, #r5c-c .r5c-acc__icon { transition: none; }
+  #r5c-c .r5c-btn:hover { transform: none; }
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---- buy buttons -------------------------------------------------
+     Inert by design. Replace with a native GHL product element, or
+     turn them into links to your checkout. This handler only exists
+     so a click during testing does not look broken. */
+  var offers = document.querySelector('#r5c-c .r5c-offers');
+  if (offers) {
+    offers.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-r5c-buy]');
+      if (!btn) return;
+      var original = btn.textContent;
+      btn.textContent = 'Not wired up — connect a GHL product';
+      btn.disabled = true;
+      setTimeout(function () { btn.textContent = original; btn.disabled = false; }, 2400);
+    });
+  }
+
+  /* ---- email capture ------------------------------------------------
+     Client-side validation only; nothing leaves the browser. Swap the
+     whole form for a native GHL form so submissions reach a contact
+     record and can trigger a workflow. */
+  var form = document.querySelector('[data-r5c-capture]');
+  if (!form) return;
+  var msg = form.querySelector('[data-r5c-msg]');
+  var input = form.querySelector('input[type=email]');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = input.value.trim();
+    // Deliberately loose: catches typos without rejecting valid odd addresses.
+    var ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    form.classList.toggle('is-invalid', !ok);
+    form.classList.remove('is-done');
+    if (!ok) {
+      msg.textContent = 'That does not look like an email address.';
+      input.focus();
+      return;
+    }
+    msg.textContent = 'Validated only — connect a GHL form to actually capture this.';
+    form.classList.add('is-done');
+    input.value = '';
+  });
+})();
+</script>
