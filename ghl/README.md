@@ -29,24 +29,24 @@ wordmark, three **non-clickable** trust signals, and exactly one link — to
 
 If you add a nav, you are adding ways to leave before the price.
 
-## Assets
+## Assets — frames are origin-locked
 
-The three animated blocks pull frames from the public repo over jsDelivr.
-Verified live: `200`, `content-type: image/webp`,
-`access-control-allow-origin: *`, `cache-control: max-age=604800`.
+The three animated blocks load frames from a **Cloudflare Worker that refuses
+any origin not on your allowlist**, so a cloned page renders black canvases.
+Set up in [`../protect/README.md`](../protect/README.md); until you deploy it,
+`FRAME_BASE` is a placeholder and the sequences will not load.
 
+```js
+var FRAME_BASE = 'https://frames.yourdomain.com';   // in all three blocks
 ```
-https://cdn.jsdelivr.net/gh/crynxmartinez/funnel3dpractice@main
-```
 
-Nothing to upload. To move hosts, change the single `FRAME_BASE` line near the
-top of each animated block's `<script>` — a **public HTTPS origin, no trailing
-slash**.
+Do **not** point this at a public CDN. A public CDN means a clone keeps working
+for free, because the frames are the expensive part and anyone can hotlink them.
 
-> The repo must stay public. Make it private again and all three animated blocks
-> 404. Pin a commit SHA instead of `@main` on a live page, otherwise jsDelivr
-> picks up whatever you push next:
-> `…/gh/crynxmartinez/funnel3dpractice@<commit-sha>`
+Each animated block also has an `ALLOWED_HOSTS` array for a client-side domain
+lock. An empty array disables it on purpose — a lock that silently blanks your
+own GHL preview is worse than no lock. It only deters a lazy clone; the Worker
+is the real barrier.
 
 ## Installing
 
@@ -125,6 +125,9 @@ anything, check:
 - Each pinned section still holds mid-scroll **and** at its very end.
 - No horizontal scrollbar at 375px wide.
 - The comparison table scrolls inside its own container, not the page.
+
+Note the harness runs on `localhost`, so add it to `ALLOWED_ORIGINS` on the
+Worker while testing, or the frames will 403 and every canvas will be black.
 
 `_test-harness.html` is generated. Regenerate it; do not edit it.
 

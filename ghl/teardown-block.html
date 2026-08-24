@@ -186,17 +186,38 @@
   'use strict';
 
   /* ========================================================
-     >>> THE ONE LINE TO CHANGE <<<
-     Public HTTPS origin serving assets/frames/... and
-     assets/poster-teardown.webp. No trailing slash.
+     >>> FRAME HOST <<<
+     Point this at the origin-locked Cloudflare Worker, NOT a public
+     CDN. A public CDN means a cloned page keeps working for free,
+     because the frames are the expensive part and anyone can hotlink
+     them. See protect/README.md for the deploy steps.
 
-     GitHub via jsDelivr (repo must be PUBLIC):
-       https://cdn.jsdelivr.net/gh/USER/REPO@main
-     GitHub Pages (public repo, or Pro for private):
-       https://USER.github.io/REPO
-     Cloudflare R2 / S3 / Netlify also fine.
+     Public HTTPS origin, no trailing slash. It serves
+     assets/frames/... and assets/poster-*.webp
      ======================================================== */
-  var FRAME_BASE = 'https://cdn.jsdelivr.net/gh/crynxmartinez/funnel3dpractice@main';
+  var FRAME_BASE = 'https://frames.example.com';
+
+  /* >>> DOMAIN LOCK <<<
+     Hosts allowed to run this block; subdomains of each entry count too.
+
+     AN EMPTY ARRAY DISABLES THE LOCK, deliberately — a lock that
+     silently blanks your own GHL preview is worse than no lock. Fill it
+     in once you know every host the funnel is served from, including the
+     preview host if you preview there.
+
+     This only deters a lazy clone: the code is visible in page source
+     and this array is editable. The Worker's origin check is the real
+     barrier, and it cannot be edited from the client. */
+  var ALLOWED_HOSTS = [];
+
+  function hostAllowed() {
+    if (!ALLOWED_HOSTS.length) return true;
+    var h = location.hostname.toLowerCase();
+    return ALLOWED_HOSTS.some(function (a) {
+      a = String(a).toLowerCase();
+      return h === a || h.slice(-(a.length + 1)) === '.' + a;
+    });
+  }
 
   var COUNTS = { desktop: 240, mobile: 120 };
   var LADDER_STEP = 12, CONCURRENCY = 6, SMOOTHING = 0.16, STATIC_AT = 0.86;
@@ -481,7 +502,9 @@
     start();
   }
 
-  if (document.readyState === 'loading') {
+  if (!hostAllowed()) {
+    console.warn('[r5x] Host not on the allowlist — sequence disabled.');
+  } else if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();

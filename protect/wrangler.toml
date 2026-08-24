@@ -1,0 +1,48 @@
+# Cloudflare Worker config for origin-locked frame delivery.
+#
+# Fill in the four >>> markers, then:
+#
+#   npx wrangler r2 bucket create r5-frames
+#   npx wrangler deploy
+#
+# The Worker needs a custom domain (or a route) on a zone you control,
+# because the whole protection rests on checking which origin is asking.
+
+name = "r5-frames"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# >>> 1. Your Cloudflare account id (dash → Workers & Pages → right sidebar).
+account_id = "PUT_YOUR_ACCOUNT_ID_HERE"
+
+# >>> 2. Where the Worker answers. Use a subdomain you own, e.g. frames.example.com.
+#        This exact value becomes FRAME_BASE in the GHL blocks.
+routes = [
+  { pattern = "frames.example.com", custom_domain = true }
+]
+
+# >>> 3. The R2 bucket holding the WebP tiers. Keys mirror the repo layout:
+#        assets/frames/<seq>/<tier>/fNNN.webp and assets/poster-<seq>.webp
+[[r2_buckets]]
+binding = "FRAMES"
+bucket_name = "r5-frames"
+
+[vars]
+# >>> 4. Every domain allowed to display the frames. Comma-separated, no
+#        scheme, no trailing slash. Subdomains of each entry are allowed too.
+#
+#        INCLUDE EVERY HOST THE FUNNEL IS SERVED FROM, or your own page breaks:
+#          - your live custom domain
+#          - the GHL preview host, if you preview there
+#          - localhost, only while testing
+#
+#        An empty value makes the Worker fail closed and return 500, on purpose.
+ALLOWED_ORIGINS = "example.com,www.example.com"
+
+# Allow requests with no Origin and no Referer. Keep this "false" — "true"
+# means anyone can fetch frames by pasting the URL in an address bar, which
+# defeats the point.
+ALLOW_DIRECT = "false"
+
+# What a blocked request sees. Keep it boring; nothing to learn from it.
+DENY_MESSAGE = "Not available from this origin."
