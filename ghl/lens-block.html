@@ -1,44 +1,54 @@
 <!--
   ============================================================
-  GHL PASTE BLOCK 1 of 2 — scroll teardown hero
+  GHL PASTE BLOCK 3 of 3 — lens dive (push-in to the sensor)
   ============================================================
-  Paste this whole thing into a GoHighLevel *Custom Code / HTML*
-  element. Self-contained: no build step, no dependencies, and
-  every class is prefixed r5x- so it cannot collide with GHL's
-  own CSS.
+  A pinned scroll sequence that travels from a front-on hero,
+  through 21 elements of glass, past the nine-blade iris, and
+  lands on the bare 45MP sensor filling the frame.
 
-  >>> SET THIS ONE LINE <<<
-  Change FRAME_BASE below to wherever the WebP frames are served
-  from. It must be a public HTTPS origin — the browser fetches
-  these directly, so a private GitHub repo will 404.
+  Paste into a GoHighLevel *Custom Code / HTML* element. Same
+  rules as the teardown block:
 
-  Placement in GHL:
-    Put this in a FULL-WIDTH, ONE-COLUMN row with row padding set
-    to 0. GHL nests everything in flex containers, and an ancestor
-    with `overflow: hidden` silently breaks `position: sticky`.
-    The script detects that and falls back automatically, but a
-    clean row avoids the problem entirely.
+    - FULL-WIDTH, ONE-COLUMN row, padding 0. GHL wraps elements
+      in flex rows that often carry `overflow: hidden`, which
+      silently breaks `position: sticky`. The script detects
+      that and falls back to fixed, but a clean row avoids it.
+    - Test on the PUBLISHED page. The builder preview usually
+      does not run JS, so this looks like an empty box in the
+      editor.
 
-  The builder preview often does not run JS. Test on the
-  PUBLISHED page, not in the editor.
+  Everything is prefixed r5l- and scoped under #r5l-lens, so it
+  cannot collide with GHL's CSS or with the other two blocks.
+
+  PLACEMENT: this is the sensor argument, so it belongs AFTER
+  your "who it's for" content and BEFORE your R5-vs-R5-II
+  comparison — the dive ends on the sensor and a comparison
+  table's first row is the sensor, which hands off cleanly.
+
+  NOTE ON COPY: do not repeat the 45MP/stacked/rolling-shutter
+  claims elsewhere on the page. This block owns them, because
+  here the sensor is the entire frame. The teardown block's
+  equivalent beat deliberately covers the stabiliser instead.
+
+  WEIGHT: 6.45 MB desktop / 1.59 MB mobile, lazy-gated — nothing
+  loads until the reader is about 1.5 screens away.
 -->
 
-<div class="r5x-scroll" id="r5x-teardown">
-  <div class="r5x-pin">
-    <canvas class="r5x-canvas" role="img"
-            aria-label="Canon EOS R5 Mark II disassembling into an exploded view as the page scrolls"></canvas>
-    <div class="r5x-scrim"></div>
-    <div class="r5x-beats"></div>
-    <div class="r5x-loader" role="progressbar" aria-label="Loading frames"
+<div class="r5l-scroll" id="r5l-lens">
+  <div class="r5l-pin">
+    <canvas class="r5l-canvas" role="img"
+            aria-label="The view travelling into the lens, through the aperture blades, ending on the bare image sensor"></canvas>
+    <div class="r5l-scrim"></div>
+    <div class="r5l-beats"></div>
+    <div class="r5l-loader" role="progressbar" aria-label="Loading frames"
          aria-valuemin="0" aria-valuemax="100"></div>
   </div>
 </div>
 
 <style>
-/* Full-bleed even inside a padded GHL container. */
-#r5x-teardown {
+#r5l-lens {
   position: relative;
-  height: 700vh;
+  height: 600vh;
   background: #07070a;
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -46,131 +56,150 @@
                Helvetica, Arial, sans-serif;
   color: #f3f3f6;
 }
-#r5x-teardown * { box-sizing: border-box; }
+#r5l-lens * { box-sizing: border-box; }
 
-#r5x-teardown .r5x-pin {
+#r5l-lens .r5l-pin {
   position: sticky; top: 0;
   height: 100vh; height: 100svh;
   overflow: hidden;
 }
-/* Applied by the script if sticky turns out to be broken by an ancestor.
+/* Applied by the script if sticky turns out to be blocked by an ancestor.
    Three states are required, not two: parked at the top before the section,
    fixed while inside it, and parked at the BOTTOM once past. Without the
    third the canvas snaps back to the section's top edge on exit and
    disappears for the rest of the scroll. */
-#r5x-teardown.r5x-fixedfallback .r5x-pin {
+#r5l-lens.r5l-fixedfallback .r5l-pin {
   position: absolute; top: 0; left: 0; right: 0;
 }
-#r5x-teardown.r5x-fixedfallback.r5x-inview .r5x-pin {
+#r5l-lens.r5l-fixedfallback.r5l-inview .r5l-pin {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1;
 }
-#r5x-teardown.r5x-fixedfallback.r5x-past .r5x-pin {
+#r5l-lens.r5l-fixedfallback.r5l-past .r5l-pin {
   position: absolute; top: auto; bottom: 0; left: 0; right: 0;
 }
 
-#r5x-teardown .r5x-canvas {
+#r5l-lens .r5l-canvas {
   position: absolute; inset: 0;
   display: block; width: 100%; height: 100%;
   background: #07070a;
 }
 
-#r5x-teardown .r5x-scrim {
+/* The teardown leaves the left third of frame empty, so its copy sits in a
+   column behind a side gradient. This sequence is radially symmetric and
+   fills the entire frame at every moment, so a column would land straight on
+   the iris. Copy goes in a bottom band behind a bottom-up scrim instead. */
+#r5l-lens .r5l-scrim {
   position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(100deg,
-    rgba(7,7,10,.95) 0%, rgba(7,7,10,.78) 26%,
-    rgba(7,7,10,.28) 50%, rgba(7,7,10,0) 68%);
-  opacity: calc(.5 + var(--r5x-p, 0) * .5);
+  background: linear-gradient(0deg,
+    rgba(7,7,10,.97) 0%, rgba(7,7,10,.9) 24%,
+    rgba(7,7,10,.5) 45%, rgba(7,7,10,0) 68%);
+  /* Starts strong and deepens: the sensor at the end is the brightest thing
+     in the sequence, so the copy needs more ground under it. */
+  opacity: calc(.74 + var(--r5l-p, 0) * .26);
 }
 
-#r5x-teardown .r5x-beats { position: absolute; inset: 0; }
+#r5l-lens .r5l-beats { position: absolute; inset: 0; }
 
-#r5x-teardown .r5x-beat {
+#r5l-lens .r5l-beat {
   position: absolute; inset: 0;
-  display: flex; flex-direction: column; justify-content: center;
+  display: flex; flex-direction: column; justify-content: flex-end;
   align-items: flex-start;
-  padding: 6rem clamp(1.25rem, 5vw, 5.5rem) 5rem;
+  padding: 6rem clamp(1.25rem, 5vw, 5.5rem) 4.5rem;
   opacity: 0; visibility: hidden;
   pointer-events: none;
   will-change: opacity, transform;
 }
-#r5x-teardown .r5x-beat > * { max-width: 32rem; pointer-events: auto; }
-#r5x-teardown .r5x-beat.is-center { align-items: center; text-align: center; }
-#r5x-teardown .r5x-beat.is-center > * { max-width: 40rem; }
+#r5l-lens .r5l-beat > * { max-width: 40rem; pointer-events: auto; }
 
-#r5x-teardown .r5x-eyebrow {
+#r5l-lens .r5l-eyebrow {
   margin: 0 0 1.1rem; font-size: .72rem; letter-spacing: .2em;
   text-transform: uppercase; color: #ff7a45; font-weight: 600;
 }
-#r5x-teardown .r5x-title {
+#r5l-lens .r5l-title {
   margin: 0 0 1.4rem;
-  font-size: clamp(2.3rem, 5.2vw, 4.6rem);
-  line-height: .98; letter-spacing: -.04em; font-weight: 600;
-  color: #f3f3f6;
+  font-size: clamp(2.1rem, 4.4vw, 3.9rem);
+  line-height: .98; letter-spacing: -.04em; font-weight: 600; color: #f3f3f6;
 }
-#r5x-teardown .r5x-body {
+#r5l-lens .r5l-body {
   margin: 0 0 2rem; font-size: clamp(1rem, 1.35vw, 1.14rem);
-  line-height: 1.62; color: #cfcfd8; max-width: 34ch;
+  line-height: 1.62; color: #cfcfd8; max-width: 48ch;
 }
-#r5x-teardown .r5x-stats {
-  display: flex; flex-wrap: wrap; gap: 2.4rem; margin: 0 0 2.2rem;
+#r5l-lens .r5l-stats {
+  display: flex; flex-wrap: wrap; gap: 2.4rem; margin: 0 0 1.5rem;
 }
-#r5x-teardown .r5x-stats dt {
+#r5l-lens .r5l-stats dt {
   font-size: clamp(1.5rem, 2.6vw, 2.1rem);
   font-weight: 600; letter-spacing: -.035em; line-height: 1;
 }
-#r5x-teardown .r5x-stats dd {
+#r5l-lens .r5l-stats dd {
   margin: .4rem 0 0; font-size: .78rem; letter-spacing: .04em;
   color: #9b9baa; text-transform: uppercase;
 }
-#r5x-teardown .r5x-cta {
+#r5l-lens .r5l-hint {
+  display: flex; align-items: center; gap: .75rem; margin: 1.5rem 0 0;
+  font-size: .75rem; letter-spacing: .14em; text-transform: uppercase;
+  color: #6f6f7e;
+}
+#r5l-lens .r5l-hint i {
+  width: 46px; height: 1px; background: rgba(255,255,255,.16);
+  display: block; position: relative; overflow: hidden;
+}
+#r5l-lens .r5l-hint i::after {
+  content: ''; position: absolute; inset: 0; background: #ff7a45;
+  animation: r5l-sweep 2.2s cubic-bezier(.22,.7,.28,1) infinite;
+}
+@keyframes r5l-sweep {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+#r5l-lens .r5l-cta {
   display: inline-flex; align-items: center; justify-content: center;
   padding: .95rem 1.7rem; border-radius: 999px;
   background: #ff7a45; color: #1c0b03;
   font-weight: 600; font-size: .95rem; text-decoration: none;
   transition: transform .25s, background-color .25s;
 }
-#r5x-teardown .r5x-cta:hover { transform: translateY(-2px); background: #ff8d5e; }
+#r5l-lens .r5l-cta:hover { transform: translateY(-2px); background: #ff8d5e; }
 
-#r5x-teardown .r5x-loader {
+#r5l-lens .r5l-loader {
   position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
   background: rgba(255,255,255,.07); transition: opacity .6s .2s;
 }
-#r5x-teardown .r5x-loader::after {
+#r5l-lens .r5l-loader::after {
   content: ''; position: absolute; inset: 0 auto 0 0;
-  width: var(--r5x-load, 0%); background: #ff7a45;
+  width: var(--r5l-load, 0%); background: #ff7a45;
   transition: width .3s linear;
 }
-#r5x-teardown.is-ready .r5x-loader { opacity: 0; }
+#r5l-lens.is-ready .r5l-loader { opacity: 0; }
 
 /* Mobile: image band on top, copy beneath — never crop 16:9 into portrait. */
 @media (max-width: 768px) {
-  #r5x-teardown { height: 620vh; }
-  #r5x-teardown .r5x-canvas { inset: 0 0 auto 0; height: 48vh; }
-  #r5x-teardown .r5x-beats { top: 44vh; }
-  #r5x-teardown .r5x-beat {
+  #r5l-lens { height: 520vh; }
+  #r5l-lens .r5l-canvas { inset: 0 0 auto 0; height: 48vh; }
+  #r5l-lens .r5l-beats { top: 44vh; }
+  #r5l-lens .r5l-beat {
     justify-content: flex-start;
     padding: 1rem clamp(1.25rem, 5vw, 5.5rem) 4.5rem;
   }
-  #r5x-teardown .r5x-beat.is-center { align-items: flex-start; text-align: left; }
-  #r5x-teardown .r5x-body { max-width: none; }
-  #r5x-teardown .r5x-stats { gap: 1.5rem; }
-  #r5x-teardown .r5x-scrim {
+  #r5l-lens .r5l-beat > * { max-width: none; }
+  #r5l-lens .r5l-stats { gap: 1.5rem; }
+  #r5l-lens .r5l-scrim {
     background: linear-gradient(180deg,
-      rgba(7,7,10,.55) 0%, rgba(7,7,10,0) 26%,
-      rgba(7,7,10,.7) 44%, #07070a 56%);
+      rgba(7,7,10,.5) 0%, rgba(7,7,10,0) 24%,
+      rgba(7,7,10,.72) 42%, #07070a 55%);
   }
 }
 
 /* No pin and no scroll-jacking for readers who asked for less motion. */
 @media (prefers-reduced-motion: reduce) {
-  #r5x-teardown { height: auto; }
-  #r5x-teardown .r5x-pin { position: static; height: auto; }
-  #r5x-teardown .r5x-canvas {
+  #r5l-lens { height: auto; }
+  #r5l-lens .r5l-pin { position: static; height: auto; }
+  #r5l-lens .r5l-canvas {
     position: relative; inset: auto; height: min(62vh, 480px);
   }
-  #r5x-teardown .r5x-scrim, #r5x-teardown .r5x-loader { display: none; }
-  #r5x-teardown .r5x-beats { position: static; }
-  #r5x-teardown .r5x-beat {
+  #r5l-lens .r5l-scrim, #r5l-lens .r5l-loader, #r5l-lens .r5l-hint { display: none; }
+  #r5l-lens .r5l-beats { position: static; }
+  #r5l-lens .r5l-beat {
     position: static; opacity: 1 !important; visibility: visible !important;
     transform: none !important;
     padding: 3.5rem clamp(1.25rem, 5vw, 5.5rem);
@@ -185,53 +214,44 @@
 
   /* ========================================================
      >>> THE ONE LINE TO CHANGE <<<
-     Public HTTPS origin serving assets/frames/... and
-     assets/poster-teardown.webp. No trailing slash.
-
-     GitHub via jsDelivr (repo must be PUBLIC):
-       https://cdn.jsdelivr.net/gh/USER/REPO@main
-     GitHub Pages (public repo, or Pro for private):
-       https://USER.github.io/REPO
-     Cloudflare R2 / S3 / Netlify also fine.
+     Public HTTPS origin, no trailing slash.
+     Pin a commit SHA instead of @main for a live page.
      ======================================================== */
   var FRAME_BASE = 'https://cdn.jsdelivr.net/gh/crynxmartinez/funnel3dpractice@main';
 
   var COUNTS = { desktop: 240, mobile: 120 };
-  var LADDER_STEP = 12, CONCURRENCY = 6, SMOOTHING = 0.16, STATIC_AT = 0.86;
+  var LADDER_STEP = 12, CONCURRENCY = 6;
+  /* Slightly heavier glide than the teardown: this is one continuous dolly
+     move rather than discrete parts separating, so it reads better with more
+     inertia. */
+  var SMOOTHING = 0.13;
+  var STATIC_AT = 1.0;   // reduced-motion still: the bare sensor, the best frame
 
   var BEATS = [
-    { from:0,    to:0.22,  eyebrow:'Canon EOS R5 Mark II',
-      title:'Taken apart,<br>so you can see<br>what you’re buying.',
-      body:'A 45MP stacked sensor, two processors, and 8K60 RAW in a 656 g weather-sealed body. Scroll to strip it down.',
-      stats:[['45','MP stacked BSI'],['8K','60p RAW internal'],['30','fps blackout-free']],
-      cta:{ label:'See the price', href:'#offer' } },
-    { from:0.22, to:0.41, eyebrow:'01 — The front end',
-      title:'The RF mount,<br>opened up.',
-      body:'A 20 mm flange distance and a 12-pin connection. The short register is what lets RF optics be designed without compromise, and the wide bus lets glass and body act as one instrument.',
-      stats:[['20','mm flange distance'],['12','pin connection']] },
-    { from:0.41, to:0.575, align:'center', eyebrow:'02 — Under the shell',
-      title:'Every gram is<br>doing a job.',
-      body:'Magnesium alloy chassis, sealed seams, and a redesigned heat path — the reason this one keeps rolling where the original R5 tapped out.' },
-    { from:0.575, to:0.72, eyebrow:'03 — The stabiliser',
-      title:'The sensor floats<br>on its own cradle.',
-      body:'That assembly is not bolted down. It rides a five-axis stabiliser that counter-moves against your hands, and coordinated with an RF lens’s own IS the pair are good for 8.5 stops.',
-      stats:[['8.5','stops IBIS + IS'],['5','axis sensor-shift']] },
-    { from:0.72, to:0.885, eyebrow:'04 — The processing',
-      title:'Two chips,<br>one of them new.',
-      body:'DIGIC X handles the image. A second DIGIC Accelerator runs the deep-learning workload — which is what makes Eye Control AF and Action Priority possible at all.',
-      stats:[['5,850','AF points'],['100%','frame coverage'],['Eye','Control AF']] },
-    { from:0.885, to:1, eyebrow:'05 — All of it',
-      title:'Nothing in here<br>is filler.',
-      body:'A 5.76M-dot viewfinder at 120 fps, a 3.2-inch vari-angle screen, dual CFexpress and SD slots, and full weather sealing — at 656 g body-only.',
-      stats:[['5.76M','dot EVF @120fps'],['656','g body only'],['2','card slots']],
+    { from:0, to:0.20, eyebrow:'The light path',
+      title:'Follow the light<br>all the way in.',
+      body:'Every photograph is a negotiation between glass and silicon. Here is the whole journey, from the front element to the thing that finally records it.',
+      hint:'Scroll to travel inward' },
+    { from:0.20, to:0.48, eyebrow:'01 — The glass',
+      title:'Twenty-one elements,<br>fifteen groups.',
+      body:'Three ultra-low dispersion and three aspherical elements pull the colours back into register before they ever reach the sensor. Fluorine coating on the front and rear surfaces sheds water and fingerprints.',
+      stats:[['21','elements'],['15','groups'],['82','mm filter thread']] },
+    { from:0.48, to:0.76, eyebrow:'02 — The aperture',
+      title:'Nine blades,<br>held wide open.',
+      body:'A rounded nine-blade diaphragm keeps out-of-focus highlights circular instead of polygonal. And f/2.8 holds from 24 mm all the way to 70 mm, so your exposure does not shift when you reframe.',
+      stats:[['f/2.8','constant'],['9','rounded blades'],['24-70','mm range']] },
+    { from:0.76, to:1, eyebrow:'03 — The sensor',
+      title:'And this is<br>where it lands.',
+      body:'Forty-five million pixels on a stacked, back-illuminated sensor. Stacking the readout circuitry behind the photosites clears the light path and drains the frame far faster — rolling shutter skew falls roughly 60% against the original R5. Propellers stay straight. Strobes stay clean.',
+      stats:[['8192','× 5464 pixels'],['60%','less skew vs R5'],['1/32000','electronic shutter']],
       cta:{ label:'See the price', href:'#offer' } }
   ];
 
-  var stage = document.getElementById('r5x-teardown');
+  var stage = document.getElementById('r5l-lens');
   if (!stage) return;
-  var canvas = stage.querySelector('.r5x-canvas');
-  var overlay = stage.querySelector('.r5x-beats');
-  var loader = stage.querySelector('.r5x-loader');
+  var canvas = stage.querySelector('.r5l-canvas');
+  var overlay = stage.querySelector('.r5l-beats');
+  var loader = stage.querySelector('.r5l-loader');
   var ctx = canvas.getContext('2d', { alpha: false });
 
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -247,7 +267,7 @@
     var next = wide ? 'desktop' : 'mobile';
     if (next === tierName) return;
     tierName = next; count = COUNTS[tierName];
-    dir = FRAME_BASE + '/assets/frames/teardown/' + tierName;
+    dir = FRAME_BASE + '/assets/frames/lens/' + tierName;
     frames = new Array(count); lastDrawn = -1;
   }
 
@@ -255,11 +275,10 @@
     return new Promise(function (res, rej) {
       var im = new Image();
       im.decoding = 'async';
-      /* Ask for CORS so the canvas stays untainted and readable
-         (getImageData / toDataURL). jsDelivr, S3 and GitHub Pages all send
-         access-control-allow-origin. A host that does not would make the
-         load fail outright, so retry once without it — a tainted canvas
-         still displays perfectly, it just cannot be read back. */
+      /* Ask for CORS so the canvas stays untainted and readable. jsDelivr, S3
+         and GitHub Pages all send access-control-allow-origin. A host that does
+         not would make the load fail outright, so retry once without it — a
+         tainted canvas still displays perfectly, it just cannot be read back. */
       if (!noCors) im.crossOrigin = 'anonymous';
       im.onload = function () { res(im); };
       im.onerror = function () {
@@ -308,17 +327,18 @@
     overlay.innerHTML = '';
     BEATS.forEach(function (b) {
       var el = document.createElement('article');
-      el.className = 'r5x-beat' + (b.align === 'center' ? ' is-center' : '');
+      el.className = 'r5l-beat';
       var h = '';
-      if (b.eyebrow) h += '<p class="r5x-eyebrow">' + b.eyebrow + '</p>';
-      if (b.title)   h += '<h2 class="r5x-title">' + b.title + '</h2>';
-      if (b.body)    h += '<p class="r5x-body">' + b.body + '</p>';
+      if (b.eyebrow) h += '<p class="r5l-eyebrow">' + b.eyebrow + '</p>';
+      if (b.title)   h += '<h2 class="r5l-title">' + b.title + '</h2>';
+      if (b.body)    h += '<p class="r5l-body">' + b.body + '</p>';
       if (b.stats) {
-        h += '<dl class="r5x-stats">';
+        h += '<dl class="r5l-stats">';
         b.stats.forEach(function (s) { h += '<div><dt>' + s[0] + '</dt><dd>' + s[1] + '</dd></div>'; });
         h += '</dl>';
       }
-      if (b.cta) h += '<a class="r5x-cta" href="' + b.cta.href + '">' + b.cta.label + '</a>';
+      if (b.cta)  h += '<a class="r5l-cta" href="' + b.cta.href + '">' + b.cta.label + '</a>';
+      if (b.hint) h += '<p class="r5l-hint"><i></i>' + b.hint + '</p>';
       el.innerHTML = h;
       overlay.appendChild(el);
       beats.push({ el: el, from: b.from, to: b.to });
@@ -359,17 +379,16 @@
     draw(current);
   }
 
-  /* GHL nests content in flex containers, and an ancestor with
-     `overflow: hidden` silently kills `position: sticky`. Detect it once,
-     mid-section, and switch to fixed positioning if the pin is not holding. */
+  /* GHL nests content in flex rows, and an ancestor with `overflow: hidden`
+     silently kills `position: sticky`. Detect it once, mid-section, and switch
+     to fixed positioning if the pin is not actually holding. */
   function checkSticky(p) {
     if (stickyChecked || p < 0.15 || p > 0.85) return;
     stickyChecked = true;
-    var pin = stage.querySelector('.r5x-pin');
-    var top = pin.getBoundingClientRect().top;
-    if (Math.abs(top) > 4) {
-      stage.classList.add('r5x-fixedfallback');
-      console.warn('[r5x] position:sticky is being blocked by an ancestor ' +
+    var pin = stage.querySelector('.r5l-pin');
+    if (Math.abs(pin.getBoundingClientRect().top) > 4) {
+      stage.classList.add('r5l-fixedfallback');
+      console.warn('[r5l] position:sticky is being blocked by an ancestor ' +
         '(most likely overflow:hidden on a GHL row). Switched to fixed. ' +
         'For a clean fix, put this block in a full-width one-column row.');
     }
@@ -378,15 +397,15 @@
   function onScroll() {
     var p = progress();
     checkSticky(p);
-    if (stage.classList.contains('r5x-fixedfallback')) {
+    if (stage.classList.contains('r5l-fixedfallback')) {
       var r = stage.getBoundingClientRect();
       var during = r.top <= 0 && r.bottom >= window.innerHeight;
-      stage.classList.toggle('r5x-inview', during);
-      stage.classList.toggle('r5x-past', !during && r.bottom < window.innerHeight);
+      stage.classList.toggle('r5l-inview', during);
+      stage.classList.toggle('r5l-past', !during && r.bottom < window.innerHeight);
     }
     target = p * (count - 1);
     updateBeats(p);
-    stage.style.setProperty('--r5x-p', p.toFixed(4));
+    stage.style.setProperty('--r5l-p', p.toFixed(4));
     if (!running) { running = true; requestAnimationFrame(tick); }
   }
 
@@ -430,19 +449,18 @@
     resolveTier();
     var lad = ladder(), done = 0;
 
-    loadImage(FRAME_BASE + '/assets/poster-teardown.webp')
+    loadImage(FRAME_BASE + '/assets/poster-lens.webp')
       .then(function (im) { poster = im; draw(current, true); })
       .catch(function () {
-        console.error('[r5x] Could not load the poster from ' + FRAME_BASE +
-          ' — check FRAME_BASE is a PUBLIC https origin. A private GitHub repo will 404.');
+        console.error('[r5l] Could not load the poster from ' + FRAME_BASE +
+          ' — check FRAME_BASE is a PUBLIC https origin. A private repo will 404.');
       })
       .then(function () {
         return Promise.all(lad.map(function (i) {
           return loadInto(i).then(function () {
             done++;
-            if (loader) {
-              loader.style.setProperty('--r5x-load', Math.round(done / lad.length * 100) + '%');
-            }
+            if (loader) loader.style.setProperty('--r5l-load',
+              Math.round(done / lad.length * 100) + '%');
             draw(current, true);
           });
         }));
@@ -456,8 +474,8 @@
     resize();
 
     /* RO not window.onresize: a canvas can have zero layout size at boot
-       (hidden tab, collapsed builder container) and becoming visible fires
-       no resize event, which would leave the bitmap at its 300x150 default. */
+       (hidden tab, collapsed builder container) and becoming visible fires no
+       resize event, which would leave the bitmap at its 300x150 default. */
     if ('ResizeObserver' in window) {
       new ResizeObserver(function () { resize(); if (!reduced) onScroll(); }).observe(canvas);
     }
@@ -467,16 +485,24 @@
       beats.forEach(function (b) {
         b.el.style.opacity = 1; b.el.style.visibility = 'visible';
       });
-      resolveTier();
-      loadInto(Math.round(STATIC_AT * (count - 1))).then(function () {
-        resize(); draw(Math.round(STATIC_AT * (count - 1)), true);
-      });
+      var idx = Math.round(STATIC_AT * (count - 1));
+      loadInto(idx).then(function () { resize(); draw(idx, true); });
       return;
     }
 
     addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-    start();
+
+    /* Below the fold: hold off on ~6.5 MB until the reader is heading this way.
+       150% of viewport gives about 1.5 screens of runway. */
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); start(); }
+      }, { rootMargin: '150% 0px' });
+      io.observe(stage);
+    } else {
+      start();
+    }
   }
 
   if (document.readyState === 'loading') {

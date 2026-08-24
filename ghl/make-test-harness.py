@@ -36,9 +36,10 @@ SHELL = """<!DOCTYPE html>
 
 <div class="filler">
   <h1>GHL simulation harness</h1>
-  <p>Both blocks below sit inside <code>overflow:hidden</code> flex rows, as they
-  would in GoHighLevel. The teardown block should log a warning and switch to
-  fixed positioning; the pin must still hold at the top of the viewport.</p>
+  <p>All three blocks below sit inside <code>overflow:hidden</code> flex rows, as
+  they would in GoHighLevel. The two pinned blocks should each log a warning and
+  switch to fixed positioning; their pins must still hold at the top of the
+  viewport.</p>
 </div>
 
 <div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
@@ -46,6 +47,12 @@ SHELL = """<!DOCTYPE html>
 </div></div></div>
 
 <div class="filler"><p>Spacer between the two blocks.</p></div>
+
+<div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
+{lens}
+</div></div></div>
+
+<div class="filler"><p>Spacer between the lens dive and the turntable.</p></div>
 
 <div class="ghl-section"><div class="ghl-row"><div class="ghl-col">
 {turntable}
@@ -60,10 +67,14 @@ SHELL = """<!DOCTYPE html>
 
 
 def main():
-    teardown = (HERE / "teardown-block.html").read_text(encoding="utf-8")
-    turntable = (HERE / "turntable-block.html").read_text(encoding="utf-8")
+    read = lambda n: (HERE / n).read_text(encoding="utf-8")
     OUT.write_text(
-        SHELL.format(teardown=teardown, turntable=turntable), encoding="utf-8"
+        SHELL.format(
+            teardown=read("teardown-block.html"),
+            lens=read("lens-block.html"),
+            turntable=read("turntable-block.html"),
+        ),
+        encoding="utf-8",
     )
     print(f"wrote {OUT.relative_to(HERE.parent)}  ({OUT.stat().st_size:,} bytes)")
     print("serve the project root, then open /ghl/_test-harness.html")
