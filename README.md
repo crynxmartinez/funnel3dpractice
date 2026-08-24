@@ -1,8 +1,8 @@
 # Canon EOS R5 Mark II — scroll-driven funnel
 
-A static, dependency-free sales funnel built around **two** scroll-driven image
-sequences. Copy beats are keyed to the frames that prove them, so a claim lands
-while the hardware it describes is on screen.
+A static, dependency-free sales funnel built around **three** image sequences —
+two scroll-driven, one you spin by hand. Copy beats are keyed to the frames that
+prove them, so a claim lands while the hardware it describes is on screen.
 
 **Independent practice project.** Not affiliated with, endorsed by, or operated
 by Canon. Product renders are Canon marketing material used for layout study
@@ -17,34 +17,44 @@ python -m http.server 8123
 Then open <http://localhost:8123>. No build step, no npm install — plain HTML,
 CSS and vanilla JS.
 
-## The two sequences
+## The three sequences
 
-| | Teardown (hero) | Lens dive (mid-page) |
-|---|---|---|
-| Move | Exploded-view disassembly | Push-in through the optics |
-| Argues | **Breadth** — every part is doing a job | **Depth** — here is the heart |
-| Ends on | Fully exploded diagram | The bare sensor, filling frame |
-| Scroll | 700vh / 620vh mobile | 600vh / 520vh mobile |
-| Loading | Eager | **Lazy-gated** |
-| Payload | 10.85 MB / 2.58 MB | 6.45 MB / 1.59 MB |
+| | Teardown (hero) | Lens dive (mid-page) | Turntable (pre-price) |
+|---|---|---|---|
+| Driver | Scroll, pinned | Scroll, pinned | **Drag** |
+| Move | Exploded-view disassembly | Push-in through the optics | ~180° orbit, front to back |
+| Argues | **Breadth** — every part is doing a job | **Depth** — here is the heart | **Handling** — controls and ports |
+| Ends on | Fully exploded diagram | The bare sensor, filling frame | The screen, dial and port door |
+| Height | 700vh / 620vh mobile | 600vh / 520vh mobile | Normal flow |
+| Loading | Eager | Lazy-gated | Lazy-gated |
+| Frames | 240 / 120 | 240 / 120 | 120 / 60 |
+| Payload | 10.85 MB / 2.58 MB | 6.45 MB / 1.59 MB | 4.08 MB / 0.99 MB |
 
 The dive owns the sensor argument, because there the sensor *is* the whole frame.
 The teardown deliberately does not repeat it — its equivalent beat covers the
 five-axis stabiliser cradle, which is what its frames actually show.
+
+The turntable is **not** pinned. A turntable's affordance is dragging, and a
+third bout of scroll-jacking would have pushed the page past 1,900vh of pinned
+scroll. Sitting in normal flow just before the price, it gives the funnel its
+one interactive moment at the point where "look it over yourself" does the most
+work.
 
 ## Layout
 
 ```
 index.html                 page shell and section mount points
 css/style.css              all styling (.seq shared, .seq--lens variant)
-js/scrollsequence.js       one factory driving both sequences
+js/sequence.js             one factory, two drivers (scroll + drag)
 js/main.js                 section rendering, reveals, accordions, form
-data/content.js            every string: both beat sets, specs, FAQ, offers
+data/content.js            every string: beat sets, specs, FAQ, offers
 tools/build-frames.py      PNG sequences -> WebP tiers
 assets/poster-teardown.webp
 assets/poster-lens.webp
+assets/poster-rotate.webp
 assets/frames/teardown/{desktop,mobile}/
 assets/frames/lens/{desktop,mobile}/
+assets/frames/rotate/{desktop,mobile}/
 ```
 
 All copy lives in `data/content.js` — funnel copy gets rewritten constantly, so
@@ -52,7 +62,7 @@ none of it is buried in markup.
 
 ## The frame pipeline
 
-Two source sequences, 240 PNGs each at 1280×720, **263 MB combined**, which
+Three source sequences, 240 PNGs each at 1280×720, **387 MB combined**, which
 cannot ship. The build script emits two WebP tiers per sequence:
 
 | Sequence | Tier | Frames | Size | Per frame |
@@ -61,14 +71,24 @@ cannot ship. The build script emits two WebP tiers per sequence:
 | teardown | mobile | 120 @ 854×480 q72 | 2.58 MB | 22 KB |
 | lens | desktop | 240 @ 1280×720 q78 | 6.45 MB | 28 KB |
 | lens | mobile | 120 @ 854×480 q72 | 1.59 MB | 14 KB |
+| rotate | desktop | 120 @ 1280×720 q78 | 4.08 MB | 35 KB |
+| rotate | mobile | 60 @ 854×480 q72 | 0.99 MB | 17 KB |
 
-A visitor downloads one tier per sequence, and the lens sequence is gated, so it
-costs nothing until they scroll to it.
+A visitor downloads one tier per sequence, and the lens and rotate sequences are
+gated, so they cost nothing until they are scrolled to.
 
-The lens footage is darker and smoother, so it compresses to roughly 60% of the
-teardown's bytes at identical quality. It keeps **all 240 frames** rather than
-being decimated: measured frame-to-frame delta peaks at 7.6 (max 11.1) through
-frames 61–100, where dropping every second frame steps visibly.
+Frame counts are set from measured motion, not guessed:
+
+- **lens** keeps all 240. Its delta peaks at 7.6 (max 11.1) through frames
+  61–100, where dropping every second frame steps visibly.
+- **rotate** is halved to 120. Its delta is only 1.32 (max 3.48) and
+  every-2nd-frame worst case is 5.64 — below the lens dive's *normal* rate. At
+  120 frames the ~180° arc is 1.5° per frame, still finer than a conventional
+  product spinner's 5–15°.
+
+The orbit is also **not a seamless loop** (measured first-vs-last difference
+21.77), so the viewer clamps at both ends rather than wrapping, and the idle
+auto-rotate ping-pongs.
 
 Source PNGs are **not tracked in git** (see `.gitignore`). To regenerate, restore
 them and run:
@@ -82,9 +102,9 @@ Requires Pillow.
 
 ## How the sequences work
 
-`js/scrollsequence.js` is one factory. Each `<section data-seq="name">` gets an
-instance configured from the `SEQUENCES` table (frame dir, counts, which beat set
-to read, easing, reduced-motion still, eager vs gated).
+`js/sequence.js` is one factory with two drivers. Each `<section data-seq="name">`
+gets an instance configured from the `SEQUENCES` table (mode, frame dir, counts,
+which beat set to read, easing, reduced-motion still, eager vs gated).
 
 Loading is staged, because awaiting several MB means a blank stage:
 
@@ -113,9 +133,24 @@ Rendering notes:
 - Tier is resolved when loading starts, not at parse time — a stage that is
   below the fold or in an unsettled viewport can report zero width.
 
-`window.__seq.teardown` and `window.__seq.lens` each expose `at()`, `loaded()`,
-`seek(p)`, `render(p)` and `load()` for checking the beat/frame mapping from the
-console. `render(p)` works even where scroll events are throttled.
+### The turntable driver
+
+- Tracks the pointer 1:1 with no easing — a spinner that lags the finger feels
+  like the object is fighting you. One canvas width of drag × 1.15 = a full sweep.
+- `touch-action: pan-y`, so vertical gestures still scroll the page and only
+  horizontal drags rotate.
+- Keyboard: focusable, with arrows, PageUp/PageDown and Home/End. Exposed as
+  `role="slider"` reporting degrees via `aria-valuenow`/`aria-valuetext`.
+- Idle auto-rotate ping-pongs across the arc and stops permanently the moment
+  the reader takes over. Disabled outright under `prefers-reduced-motion` —
+  dragging still works, since that is user-initiated.
+- The per-frame delta is clamped: `requestAnimationFrame` pauses on a hidden
+  tab, so the first frame back would otherwise carry the whole away-time and
+  teleport the camera across the arc.
+
+`window.__seq.teardown`, `.lens` and `.rotate` each expose `at()`, `loaded()`,
+`seek(p)`, `render(p)`, `load()` and `isAutoRotating()` for checking the mapping
+from the console. `render(p)` works even where scroll and rAF are throttled.
 
 ## Beat maps
 

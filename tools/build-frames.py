@@ -31,6 +31,19 @@ SEQUENCES = [
     # at the same quality. Kept at full frame rate because the travel through
     # the front element (frames 61-100) steps visibly if decimated.
     {"name": "lens", "src": "Cannon into the lens", "tiers": STANDARD_TIERS},
+    # The ~180 degree orbit from front to back, driven by dragging rather than
+    # scrolling. Halved and quartered: measured per-frame delta is only 1.32
+    # (max 3.48), so every-2nd-frame is smoother than the lens dive's normal
+    # rate. 120 frames over the arc is 1.5 degrees per frame, still far finer
+    # than a conventional product spinner's 5-15.
+    {
+        "name": "rotate",
+        "src": "cannon rotate",
+        "tiers": [
+            ("desktop", 1280, 720, 78, 2),
+            ("mobile", 854, 480, 72, 4),
+        ],
+    },
 ]
 
 POSTER_QUALITY = 88

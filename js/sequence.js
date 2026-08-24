@@ -1,26 +1,29 @@
-/* Scroll-driven image sequences.
+/* Image-sequence players. One loader, two drivers.
  *
- * One factory, two instances:
- *   teardown  the hero. An exploded-view disassembly, loaded eagerly.
- *   lens      mid-page. A push-in through the optics that lands on the bare
- *             sensor, lazy-gated so it costs nothing until you scroll near it.
+ *   teardown  scroll  hero. An exploded-view disassembly, loaded eagerly.
+ *   lens      scroll  mid-page. A push-in through the optics onto the sensor.
+ *   rotate    drag    pre-price. A ~180 degree orbit the reader spins by hand.
  *
- * Copy beats are keyed to the frames that prove them, so the 45MP claim lands
- * while the sensor is actually on screen.
+ * Scroll-driven sections key copy beats to the frames that prove them, so the
+ * 45MP claim lands while the sensor is actually on screen. The drag-driven one
+ * has no beats — it is there to be handled, not narrated.
  *
- * Loading is staged, because awaiting several MB of frames means a blank stage:
+ * Loading is staged, because awaiting several MB means a blank stage:
  *   1. poster        paints immediately, the stage is never empty
- *   2. coarse ladder every Nth frame — scroll becomes usable here
+ *   2. coarse ladder every Nth frame — interaction becomes usable here
  *   3. backfill      the rest, nearest the playhead first
  */
 (function () {
   'use strict';
 
   var CONCURRENCY = 6;   // parallel image requests during backfill
-  var BREAKPOINT = '(max-width: 768px)';
+  var BREAKPOINT = 768;
+  var DRAG_GAIN = 1.15;  // canvas widths of travel per full sweep
+  var AUTO_SWEEP_MS = 18000;
 
   var SEQUENCES = {
     teardown: {
+      mode: 'scroll',
       dir: 'assets/frames/teardown',
       poster: 'assets/poster-teardown.webp',
       counts: { desktop: 240, mobile: 120 },
@@ -31,6 +34,7 @@
       eager: true
     },
     lens: {
+      mode: 'scroll',
       dir: 'assets/frames/lens',
       poster: 'assets/poster-lens.webp',
       counts: { desktop: 240, mobile: 120 },
@@ -39,22 +43,54 @@
       // Slightly heavier glide: this is one continuous dolly move rather than
       // discrete parts separating, so it reads better with more inertia.
       smoothing: 0.13,
-      staticAt: 1.0,    // reduced-motion still: the bare sensor, the best frame
+      staticAt: 1.0,    // reduced-motion still: the bare sensor
+      eager: false
+    },
+    rotate: {
+      mode: 'drag',
+      dir: 'assets/frames/rotate',
+      poster: 'assets/poster-rotate.webp',
+      // Deliberately coarser than the cinematic sequences: 120 frames over the
+      // ~180 degree arc is 1.5 degrees per frame, finer than a conventional
+      // product spinner, and measured motion is gentle enough that halving the
+      // source is invisible.
+      counts: { desktop: 120, mobile: 60 },
+      ladderStep: 8,
       eager: false
     }
   };
 
-  function createScrollSequence(stage, cfg) {
+  function createSequence(stage, cfg) {
     var canvas = stage.querySelector('[data-seq-canvas]');
     var overlay = stage.querySelector('[data-seq-beats]');
     var progressEl = stage.querySelector('[data-seq-progress]');
-    if (!canvas || !overlay) return null;
+    var trackEl = stage.querySelector('[data-seq-track]');
+    if (!canvas) return null;
 
+    var isDrag = cfg.mode === 'drag';
     var ctx = canvas.getContext('2d', { alpha: false });
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var tierName, count, dir;
     var frames;                      // decoded Image objects, sparse
+    var poster = null;
+    var target = 0;      // where the driver says we are, in frame units
+    var current = 0;     // eased value actually drawn (scroll mode)
+    var lastDrawn = -1;
+    var running = false;
+    var started = false;
+
+    /* drag-mode state */
+    var pos = 0;                     // 0..1 rotation position
+    var dragging = false;
+    var interacted = false;
+    var autoRAF = null;
+    var autoDir = 1;
+    var autoLast = null;
+    var startX = 0;
+    var startPos = 0;
+
+    function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
     /* Resolved twice: once at boot so the frame maths has values, then again
        the moment loading actually starts. At parse time the layout viewport
@@ -64,7 +100,7 @@
        free while nothing has loaded yet, and is skipped once frames exist. */
     function resolveTier() {
       if (frames && frames.some(Boolean)) return;
-      var wide = (canvas.clientWidth || document.documentElement.clientWidth) > 768;
+      var wide = (canvas.clientWidth || document.documentElement.clientWidth) > BREAKPOINT;
       var next = wide ? 'desktop' : 'mobile';
       if (next === tierName) return;
       tierName = next;
@@ -73,14 +109,6 @@
       frames = new Array(count);
       lastDrawn = -1;
     }
-    var poster = null;
-    var target = 0;      // where the scroll says we are, in frame units
-    var current = 0;     // eased value actually drawn
-    var lastDrawn = -1;
-    var running = false;
-    var started = false;
-
-    function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
     function framePath(i) {
       return dir + '/f' + String(i + 1).padStart(3, '0') + '.webp';
@@ -124,7 +152,7 @@
       ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
     }
 
-    /* Nearest loaded frame, searching outward — lets scroll feel responsive
+    /* Nearest loaded frame, searching outward — keeps interaction responsive
        while the backfill is still arriving. */
     function nearestLoaded(i) {
       if (frames[i]) return frames[i];
@@ -142,11 +170,12 @@
       paint(nearestLoaded(i));
     }
 
-    /* ---- copy beats -------------------------------------------------- */
+    /* ---- copy beats (scroll mode only) ------------------------------- */
 
     var beats = [];
 
     function buildBeats() {
+      if (!overlay || !cfg.beats) return;
       var data = (window.FUNNEL && window.FUNNEL[cfg.beats]) || [];
       overlay.innerHTML = '';
       data.forEach(function (b) {
@@ -180,8 +209,6 @@
       });
     }
 
-    /* Fades live inside each band, so one beat is fully out before the next
-       starts in — no two headlines stacked on top of each other. */
     function beatOpacity(b, p) {
       /* The closing beat holds at full opacity instead of fading out: its band
          ends at exactly 1.0, so fading it would blink the copy — and its CTA —
@@ -208,9 +235,10 @@
       }
     }
 
-    /* ---- scroll ------------------------------------------------------ */
+    /* ---- scroll driver ----------------------------------------------- */
 
     function progress() {
+      if (isDrag) return pos;
       var travel = stage.offsetHeight - window.innerHeight;
       if (travel <= 0) return 0;
       return clamp(-stage.getBoundingClientRect().top / travel, 0, 1);
@@ -239,6 +267,110 @@
       }
     }
 
+    /* ---- drag driver -------------------------------------------------- */
+
+    /* No easing here: a turntable should track the finger exactly, or it feels
+       like the object is lagging behind the hand. */
+    function setPos(p) {
+      pos = clamp(p, 0, 1);
+      target = current = pos * (count - 1);
+      stage.style.setProperty('--seq-progress', pos.toFixed(4));
+      if (trackEl) trackEl.style.setProperty('--pos', (pos * 100).toFixed(2) + '%');
+      var deg = Math.round(pos * 180);
+      canvas.setAttribute('aria-valuenow', String(deg));
+      canvas.setAttribute('aria-valuetext', deg + ' degrees rotated');
+      draw(current, true);
+    }
+
+    function stopAuto() {
+      if (autoRAF) { cancelAnimationFrame(autoRAF); autoRAF = null; }
+    }
+
+    function markInteracted() {
+      if (interacted) return;
+      interacted = true;
+      stopAuto();
+      stage.classList.add('is-touched');
+    }
+
+    /* Idle demo: sweep front-to-back and back again so both faces are seen,
+       then stop for good the instant the reader takes over. The arc does not
+       loop seamlessly (measured first-vs-last difference is high), so this
+       ping-pongs rather than wrapping. */
+    function startAuto() {
+      if (interacted || reduced) return;
+      stopAuto();
+      autoLast = null;
+      autoRAF = requestAnimationFrame(function step(ts) {
+        if (interacted) return;
+        if (autoLast !== null) {
+          /* Clamp the delta: rAF pauses while the tab is hidden, so the first
+             frame after returning carries the whole away-time and would
+             teleport the camera across the arc. */
+          var dt = Math.min(ts - autoLast, 50);
+          var next = pos + autoDir * (dt / AUTO_SWEEP_MS);
+          if (next >= 1) { next = 1; autoDir = -1; }
+          else if (next <= 0) { next = 0; autoDir = 1; }
+          setPos(next);
+        }
+        autoLast = ts;
+        autoRAF = requestAnimationFrame(step);
+      });
+    }
+
+    function onDown(e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true;
+      startX = e.clientX;
+      startPos = pos;
+      markInteracted();
+      stage.classList.add('is-grabbing');
+      /* Capture keeps the drag alive when the pointer leaves the canvas, but it
+         throws if the pointer is already gone — which must not abort the drag. */
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* fine */ }
+    }
+
+    function onMove(e) {
+      if (!dragging) return;
+      var w = canvas.clientWidth || 1;
+      setPos(startPos + ((e.clientX - startX) / w) * DRAG_GAIN);
+    }
+
+    function onUp() {
+      dragging = false;
+      stage.classList.remove('is-grabbing');
+    }
+
+    function onKey(e) {
+      var step = 1 / (count - 1);
+      var k = e.key;
+      if (k === 'ArrowLeft' || k === 'ArrowDown') setPos(pos - step * 3);
+      else if (k === 'ArrowRight' || k === 'ArrowUp') setPos(pos + step * 3);
+      else if (k === 'Home') setPos(0);
+      else if (k === 'End') setPos(1);
+      else if (k === 'PageDown') setPos(pos - step * 12);
+      else if (k === 'PageUp') setPos(pos + step * 12);
+      else return;
+      e.preventDefault();
+      markInteracted();
+    }
+
+    function initDrag() {
+      canvas.setAttribute('role', 'slider');
+      canvas.setAttribute('tabindex', '0');
+      canvas.setAttribute('aria-valuemin', '0');
+      canvas.setAttribute('aria-valuemax', '180');
+      setPos(0);
+
+      canvas.addEventListener('pointerdown', onDown);
+      canvas.addEventListener('pointermove', onMove);
+      canvas.addEventListener('pointerup', onUp);
+      canvas.addEventListener('pointercancel', onUp);
+      canvas.addEventListener('keydown', onKey);
+      /* Wheel is intentionally not bound: hijacking it inside a normal-flow
+         section would fight the page scroll. */
+    }
+
     /* ---- staged loading ---------------------------------------------- */
 
     function ladderIndices() {
@@ -256,7 +388,7 @@
     }
 
     /* Pool that always picks the pending frame closest to the playhead, so the
-       stretch being looked at sharpens before the far end of the timeline. */
+       stretch being looked at sharpens before the far end of the sequence. */
     function backfill() {
       var pending = [];
       for (var i = 0; i < count; i++) if (!frames[i]) pending.push(i);
@@ -304,8 +436,8 @@
     }
 
     function startStatic() {
-      /* Reduced motion: no pin, no scroll-jacking. Show the settled frame and
-         let every beat sit in normal document flow. */
+      /* Reduced motion, scroll mode: no pin, no scroll-jacking. Show the
+         settled frame and let every beat sit in normal document flow. */
       resolveTier();
       stage.classList.add('is-static');
       beats.forEach(function (b) {
@@ -339,6 +471,7 @@
         }));
       }).then(function () {
         stage.classList.add('is-ready');
+        if (isDrag) startAuto();
         return backfill();
       }).then(function () {
         stage.classList.add('is-complete');
@@ -359,22 +492,24 @@
       if ('ResizeObserver' in window) {
         new ResizeObserver(function () {
           resize();
-          if (!reduced) onScroll();
+          if (!isDrag && !reduced) onScroll();
         }).observe(canvas);
       }
 
       window.addEventListener('resize', function () {
         resize();
-        if (!reduced) onScroll();
+        if (!isDrag && !reduced) onScroll();
       });
 
-      if (reduced) {
+      if (isDrag) {
+        initDrag();
+      } else if (reduced) {
         startStatic();
         return;
+      } else {
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
       }
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
 
       if (cfg.eager || !('IntersectionObserver' in window)) {
         startAnimated();
@@ -400,11 +535,13 @@
       /* Getters, not snapshots: the tier can be re-resolved after boot. */
       get tier() { return tierName; },
       get count() { return count; },
+      get mode() { return cfg.mode; },
       at: function () { return { progress: progress(), frame: Math.round(current) }; },
       loaded: function () { return frames.filter(Boolean).length; },
-      /* Jump straight to a progress value without going through scroll — lets
-         you check which beat owns which frame even where scroll is throttled. */
+      /* Jump straight to a position without going through scroll or drag —
+         lets you check the mapping even where input is throttled. */
       render: function (p) {
+        if (isDrag) { setPos(p); return { progress: pos, frame: Math.round(current) }; }
         target = current = p * (count - 1);
         updateBeats(p);
         stage.style.setProperty('--seq-progress', p.toFixed(4));
@@ -416,7 +553,8 @@
         window.scrollTo({ top: stage.offsetTop + travel * p, behavior: 'instant' });
       },
       /* Force loading to begin regardless of the gate. */
-      load: startAnimated
+      load: startAnimated,
+      isAutoRotating: function () { return !!autoRAF; }
     };
   }
 
@@ -427,7 +565,7 @@
       var name = stage.getAttribute('data-seq');
       var cfg = SEQUENCES[name];
       if (!cfg) return;
-      var inst = createScrollSequence(stage, cfg);
+      var inst = createSequence(stage, cfg);
       if (inst) window.__seq[name] = inst;
     }
   );

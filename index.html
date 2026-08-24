@@ -19,6 +19,7 @@
   <span class="topbar__mark">EOS R5<sup>II</sup></span>
   <nav class="topbar__nav">
     <a href="#inside-the-lens">Inside</a>
+    <a href="#handle">Handle it</a>
     <a href="#compare">vs R5</a>
     <a href="#specs">Specs</a>
     <a href="#faq">FAQ</a>
@@ -94,6 +95,28 @@
     </div>
   </section>
 
+  <!-- ============ TURNTABLE: drag-to-rotate ============ -->
+  <!-- Not pinned. A turntable's affordance is dragging, and a third bout of
+       scroll-jacking would be monotonous. Lazy-gated like the lens dive. -->
+  <section class="section turntable" data-seq="rotate" id="handle">
+    <div class="wrap">
+      <p class="kicker reveal" data-rot-kicker></p>
+      <h2 class="h2 reveal" data-rot-title></h2>
+      <p class="lede reveal" data-rot-lede></p>
+
+      <div class="turntable__stage reveal">
+        <canvas class="turntable__canvas" data-seq-canvas
+                aria-label="Rotate the Canon EOS R5 Mark II. Drag horizontally, or use the arrow keys."></canvas>
+        <p class="turntable__hint" data-rot-hint></p>
+        <div class="turntable__track" data-seq-track aria-hidden="true"></div>
+        <div class="turntable__loader" data-seq-progress
+             role="progressbar" aria-label="Loading frames" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+
+      <dl class="turntable__facts reveal" data-rot-facts></dl>
+    </div>
+  </section>
+
   <!-- ============ OFFER ============ -->
   <section class="section section--offer" id="offer">
     <div class="wrap">
@@ -162,7 +185,7 @@
 </div>
 
 <script src="data/content.js"></script>
-<script src="js/scrollsequence.js"></script>
+<script src="js/sequence.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

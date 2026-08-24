@@ -710,3 +710,117 @@ a { color: inherit; }
   border-top: 1px solid var(--line);
 }
 .seq.is-static .beat__hint { display: none; }
+
+/* ============================================================
+   TURNTABLE — drag-driven, not pinned
+   The other two sequences are scroll-driven and pinned. A
+   turntable's affordance is dragging, and a third bout of
+   scroll-jacking would be monotonous, so this one sits in
+   normal flow and is spun by hand just before the price.
+   ============================================================ */
+
+.turntable__stage {
+  position: relative;
+  margin-top: 3rem;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--ink-3);
+  aspect-ratio: 16 / 9;
+  max-height: min(62vh, 560px);
+}
+
+.turntable__canvas {
+  width: 100%; height: 100%;
+  display: block;
+  background: var(--ink);
+  cursor: grab;
+  /* Vertical gestures must still scroll the page; only horizontal
+     drags belong to the turntable. */
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.turntable.is-grabbing .turntable__canvas { cursor: grabbing; }
+.turntable__canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+
+.turntable__hint {
+  position: absolute; left: 50%; bottom: 1.6rem;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(7, 7, 10, 0.72);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line-2);
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--dim);
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+/* Once the reader takes over, the instruction has done its job. */
+.turntable.is-touched .turntable__hint {
+  opacity: 0;
+  transform: translateX(-50%) translateY(6px);
+}
+
+/* Rotation position readout — doubles as a hint that this thing moves. */
+.turntable__track {
+  position: absolute; left: 50%; bottom: 0.85rem;
+  transform: translateX(-50%);
+  width: min(180px, 40%); height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.turntable.is-touched .turntable__track { opacity: 1; }
+.turntable__track::after {
+  content: '';
+  position: absolute; top: -2px; bottom: -2px;
+  left: var(--pos, 0%);
+  width: 28px;
+  margin-left: -14px;
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.turntable__loader {
+  position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  transition: opacity 0.6s 0.2s;
+}
+.turntable__loader::after {
+  content: ''; position: absolute; inset: 0 auto 0 0;
+  width: var(--load, 0%);
+  background: var(--accent);
+  transition: width 0.3s linear;
+}
+.turntable.is-ready .turntable__loader { opacity: 0; }
+
+.turntable__facts {
+  display: grid; gap: 1.5rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  margin: 2.5rem 0 0;
+}
+.turntable__facts dt {
+  font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em;
+  margin-bottom: 0.35rem;
+}
+.turntable__facts dt::before {
+  content: ''; display: inline-block;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent);
+  vertical-align: 0.22em; margin-right: 0.55rem;
+}
+.turntable__facts dd {
+  margin: 0; font-size: 0.87rem; color: var(--dim);
+}
+
+@media (max-width: 768px) {
+  /* Taller box for a bigger touch target. The letterboxing this adds is
+     invisible: the render sits on near-black and so does the stage. */
+  .turntable__stage { aspect-ratio: 4 / 3; max-height: 46vh; }
+  .turntable__hint { bottom: 1.3rem; font-size: 0.68rem; }
+}

@@ -55,6 +55,28 @@
     });
   }
 
+  /* ---- turntable section copy ---------------------------------------- */
+
+  function renderRotate() {
+    var r = F.ROTATE;
+    if (!r) return;
+    var set = function (sel, html) {
+      var n = mount(sel);
+      if (n) n.innerHTML = html;
+    };
+    set('[data-rot-kicker]', esc(r.kicker));
+    set('[data-rot-title]', r.title);            // contains intentional <br>
+    set('[data-rot-lede]', esc(r.lede));
+    set('[data-rot-hint]', esc(r.hint));
+
+    var facts = mount('[data-rot-facts]');
+    if (facts && r.facts) {
+      facts.innerHTML = r.facts.map(function (f) {
+        return '<div><dt>' + esc(f[0]) + '</dt><dd>' + esc(f[1]) + '</dd></div>';
+      }).join('');
+    }
+  }
+
   /* ---- comparison ---------------------------------------------------- */
 
   function renderComparison() {
@@ -233,6 +255,7 @@
 
   renderBenefits();
   renderCases();
+  renderRotate();
   renderComparison();
   renderSpecs();
   renderOffer();

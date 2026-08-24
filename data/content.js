@@ -184,6 +184,23 @@ const USE_CASES = [
   },
 ];
 
+/* Drag-to-rotate viewer, placed just before the price.
+   The orbit runs front to back and ends on the controls, so this section is
+   about handling and connectivity — the third distinct argument, after the
+   teardown's breadth and the dive's depth. */
+const ROTATE = {
+  kicker: 'Handle it',
+  title: 'Look it over<br>yourself.',
+  lede: 'The orbit runs from the front element round to the controls. Drag it, or use the arrow keys, and stop wherever you want a closer look.',
+  hint: 'Drag to rotate',
+  facts: [
+    ['Vari-angle screen', '3.2-inch, 2.1M dots, flips fully forward for pieces to camera.'],
+    ['Two card slots', 'CFexpress Type B for 8K RAW, SD UHS-II alongside it for redundancy.'],
+    ['Ports under the door', 'USB-C, full-size HDMI, mic, headphones and timecode.'],
+    ['Weather sealed', 'Magnesium alloy shell with sealed seams at every opening.'],
+  ],
+};
+
 /* The upgrade lever: why move off an original R5 */
 const COMPARISON = {
   columns: ['', 'EOS R5 (2020)', 'EOS R5 Mark II'],
@@ -301,5 +318,5 @@ const OFFER = {
 };
 
 window.FUNNEL = {
-  BEATS, LENS_BEATS, BENEFITS, USE_CASES, COMPARISON, SPECS, FAQS, OFFER,
+  BEATS, LENS_BEATS, ROTATE, BENEFITS, USE_CASES, COMPARISON, SPECS, FAQS, OFFER,
 };

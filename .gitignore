@@ -1,9 +1,11 @@
-# Source frame sequences — 263 MB of 1280x720 PNGs extracted from the product
+# Source frame sequences — 387 MB of 1280x720 PNGs extracted from the product
 # videos. Deliberately not tracked: the site serves the generated WebP tiers in
 # assets/frames/, and tools/build-frames.py regenerates those from these folders.
 # Drop the PNGs back in at these paths if you need to re-run the build.
+# Note the inconsistent capitalisation — these match the folder names as given.
 Canon EOS R5 Mark II/
 Cannon into the lens/
+cannon rotate/
 
 # Editor / tooling
 .claude/
