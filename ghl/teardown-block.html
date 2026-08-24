@@ -1,0 +1,477 @@
+<!--
+  ============================================================
+  GHL PASTE BLOCK 1 of 2 — scroll teardown hero
+  ============================================================
+  Paste this whole thing into a GoHighLevel *Custom Code / HTML*
+  element. Self-contained: no build step, no dependencies, and
+  every class is prefixed r5x- so it cannot collide with GHL's
+  own CSS.
+
+  >>> SET THIS ONE LINE <<<
+  Change FRAME_BASE below to wherever the WebP frames are served
+  from. It must be a public HTTPS origin — the browser fetches
+  these directly, so a private GitHub repo will 404.
+
+  Placement in GHL:
+    Put this in a FULL-WIDTH, ONE-COLUMN row with row padding set
+    to 0. GHL nests everything in flex containers, and an ancestor
+    with `overflow: hidden` silently breaks `position: sticky`.
+    The script detects that and falls back automatically, but a
+    clean row avoids the problem entirely.
+
+  The builder preview often does not run JS. Test on the
+  PUBLISHED page, not in the editor.
+-->
+
+<div class="r5x-scroll" id="r5x-teardown">
+  <div class="r5x-pin">
+    <canvas class="r5x-canvas" role="img"
+            aria-label="Canon EOS R5 Mark II disassembling into an exploded view as the page scrolls"></canvas>
+    <div class="r5x-scrim"></div>
+    <div class="r5x-beats"></div>
+    <div class="r5x-loader" role="progressbar" aria-label="Loading frames"
+         aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+</div>
+
+<style>
+/* Full-bleed even inside a padded GHL container. */
+#r5x-teardown {
+  position: relative;
+  height: 700vh;
+  background: #07070a;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Helvetica, Arial, sans-serif;
+  color: #f3f3f6;
+}
+#r5x-teardown * { box-sizing: border-box; }
+
+#r5x-teardown .r5x-pin {
+  position: sticky; top: 0;
+  height: 100vh; height: 100svh;
+  overflow: hidden;
+}
+/* Applied by the script if sticky turns out to be broken by an ancestor. */
+#r5x-teardown.r5x-fixedfallback .r5x-pin { position: static; }
+#r5x-teardown.r5x-fixedfallback.r5x-inview .r5x-pin {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1;
+}
+
+#r5x-teardown .r5x-canvas {
+  position: absolute; inset: 0;
+  display: block; width: 100%; height: 100%;
+  background: #07070a;
+}
+
+#r5x-teardown .r5x-scrim {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg,
+    rgba(7,7,10,.95) 0%, rgba(7,7,10,.78) 26%,
+    rgba(7,7,10,.28) 50%, rgba(7,7,10,0) 68%);
+  opacity: calc(.5 + var(--r5x-p, 0) * .5);
+}
+
+#r5x-teardown .r5x-beats { position: absolute; inset: 0; }
+
+#r5x-teardown .r5x-beat {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: flex-start;
+  padding: 6rem clamp(1.25rem, 5vw, 5.5rem) 5rem;
+  opacity: 0; visibility: hidden;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+#r5x-teardown .r5x-beat > * { max-width: 32rem; pointer-events: auto; }
+#r5x-teardown .r5x-beat.is-center { align-items: center; text-align: center; }
+#r5x-teardown .r5x-beat.is-center > * { max-width: 40rem; }
+
+#r5x-teardown .r5x-eyebrow {
+  margin: 0 0 1.1rem; font-size: .72rem; letter-spacing: .2em;
+  text-transform: uppercase; color: #ff7a45; font-weight: 600;
+}
+#r5x-teardown .r5x-title {
+  margin: 0 0 1.4rem;
+  font-size: clamp(2.3rem, 5.2vw, 4.6rem);
+  line-height: .98; letter-spacing: -.04em; font-weight: 600;
+  color: #f3f3f6;
+}
+#r5x-teardown .r5x-body {
+  margin: 0 0 2rem; font-size: clamp(1rem, 1.35vw, 1.14rem);
+  line-height: 1.62; color: #cfcfd8; max-width: 34ch;
+}
+#r5x-teardown .r5x-stats {
+  display: flex; flex-wrap: wrap; gap: 2.4rem; margin: 0 0 2.2rem;
+}
+#r5x-teardown .r5x-stats dt {
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 600; letter-spacing: -.035em; line-height: 1;
+}
+#r5x-teardown .r5x-stats dd {
+  margin: .4rem 0 0; font-size: .78rem; letter-spacing: .04em;
+  color: #9b9baa; text-transform: uppercase;
+}
+#r5x-teardown .r5x-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: .95rem 1.7rem; border-radius: 999px;
+  background: #ff7a45; color: #1c0b03;
+  font-weight: 600; font-size: .95rem; text-decoration: none;
+  transition: transform .25s, background-color .25s;
+}
+#r5x-teardown .r5x-cta:hover { transform: translateY(-2px); background: #ff8d5e; }
+
+#r5x-teardown .r5x-loader {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  background: rgba(255,255,255,.07); transition: opacity .6s .2s;
+}
+#r5x-teardown .r5x-loader::after {
+  content: ''; position: absolute; inset: 0 auto 0 0;
+  width: var(--r5x-load, 0%); background: #ff7a45;
+  transition: width .3s linear;
+}
+#r5x-teardown.is-ready .r5x-loader { opacity: 0; }
+
+/* Mobile: image band on top, copy beneath — never crop 16:9 into portrait. */
+@media (max-width: 768px) {
+  #r5x-teardown { height: 620vh; }
+  #r5x-teardown .r5x-canvas { inset: 0 0 auto 0; height: 48vh; }
+  #r5x-teardown .r5x-beats { top: 44vh; }
+  #r5x-teardown .r5x-beat {
+    justify-content: flex-start;
+    padding: 1rem clamp(1.25rem, 5vw, 5.5rem) 4.5rem;
+  }
+  #r5x-teardown .r5x-beat.is-center { align-items: flex-start; text-align: left; }
+  #r5x-teardown .r5x-body { max-width: none; }
+  #r5x-teardown .r5x-stats { gap: 1.5rem; }
+  #r5x-teardown .r5x-scrim {
+    background: linear-gradient(180deg,
+      rgba(7,7,10,.55) 0%, rgba(7,7,10,0) 26%,
+      rgba(7,7,10,.7) 44%, #07070a 56%);
+  }
+}
+
+/* No pin and no scroll-jacking for readers who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  #r5x-teardown { height: auto; }
+  #r5x-teardown .r5x-pin { position: static; height: auto; }
+  #r5x-teardown .r5x-canvas {
+    position: relative; inset: auto; height: min(62vh, 480px);
+  }
+  #r5x-teardown .r5x-scrim, #r5x-teardown .r5x-loader { display: none; }
+  #r5x-teardown .r5x-beats { position: static; }
+  #r5x-teardown .r5x-beat {
+    position: static; opacity: 1 !important; visibility: visible !important;
+    transform: none !important;
+    padding: 3.5rem clamp(1.25rem, 5vw, 5.5rem);
+    border-top: 1px solid rgba(255,255,255,.09);
+  }
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ========================================================
+     >>> THE ONE LINE TO CHANGE <<<
+     Public HTTPS origin serving assets/frames/... and
+     assets/poster-teardown.webp. No trailing slash.
+
+     GitHub via jsDelivr (repo must be PUBLIC):
+       https://cdn.jsdelivr.net/gh/USER/REPO@main
+     GitHub Pages (public repo, or Pro for private):
+       https://USER.github.io/REPO
+     Cloudflare R2 / S3 / Netlify also fine.
+     ======================================================== */
+  var FRAME_BASE = 'https://cdn.jsdelivr.net/gh/crynxmartinez/funnel3dpractice@main';
+
+  var COUNTS = { desktop: 240, mobile: 120 };
+  var LADDER_STEP = 12, CONCURRENCY = 6, SMOOTHING = 0.16, STATIC_AT = 0.86;
+
+  var BEATS = [
+    { from:0,    to:0.22,  eyebrow:'Canon EOS R5 Mark II',
+      title:'Taken apart,<br>so you can see<br>what you’re buying.',
+      body:'A 45MP stacked sensor, two processors, and 8K60 RAW in a 656 g weather-sealed body. Scroll to strip it down.',
+      stats:[['45','MP stacked BSI'],['8K','60p RAW internal'],['30','fps blackout-free']],
+      cta:{ label:'See the price', href:'#offer' } },
+    { from:0.22, to:0.41, eyebrow:'01 — The front end',
+      title:'The RF mount,<br>opened up.',
+      body:'A 20 mm flange distance and a 12-pin connection. The short register is what lets RF optics be designed without compromise, and the wide bus lets glass and body act as one instrument.',
+      stats:[['20','mm flange distance'],['12','pin connection']] },
+    { from:0.41, to:0.575, align:'center', eyebrow:'02 — Under the shell',
+      title:'Every gram is<br>doing a job.',
+      body:'Magnesium alloy chassis, sealed seams, and a redesigned heat path — the reason this one keeps rolling where the original R5 tapped out.' },
+    { from:0.575, to:0.72, eyebrow:'03 — The stabiliser',
+      title:'The sensor floats<br>on its own cradle.',
+      body:'That assembly is not bolted down. It rides a five-axis stabiliser that counter-moves against your hands, and coordinated with an RF lens’s own IS the pair are good for 8.5 stops.',
+      stats:[['8.5','stops IBIS + IS'],['5','axis sensor-shift']] },
+    { from:0.72, to:0.885, eyebrow:'04 — The processing',
+      title:'Two chips,<br>one of them new.',
+      body:'DIGIC X handles the image. A second DIGIC Accelerator runs the deep-learning workload — which is what makes Eye Control AF and Action Priority possible at all.',
+      stats:[['5,850','AF points'],['100%','frame coverage'],['Eye','Control AF']] },
+    { from:0.885, to:1, eyebrow:'05 — All of it',
+      title:'Nothing in here<br>is filler.',
+      body:'A 5.76M-dot viewfinder at 120 fps, a 3.2-inch vari-angle screen, dual CFexpress and SD slots, and full weather sealing — at 656 g body-only.',
+      stats:[['5.76M','dot EVF @120fps'],['656','g body only'],['2','card slots']],
+      cta:{ label:'See the price', href:'#offer' } }
+  ];
+
+  var stage = document.getElementById('r5x-teardown');
+  if (!stage) return;
+  var canvas = stage.querySelector('.r5x-canvas');
+  var overlay = stage.querySelector('.r5x-beats');
+  var loader = stage.querySelector('.r5x-loader');
+  var ctx = canvas.getContext('2d', { alpha: false });
+
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tierName, count, dir, frames, poster = null;
+  var target = 0, current = 0, lastDrawn = -1, running = false, started = false;
+  var stickyChecked = false;
+
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+
+  function resolveTier() {
+    if (frames && frames.some(Boolean)) return;
+    var wide = (canvas.clientWidth || document.documentElement.clientWidth) > 768;
+    var next = wide ? 'desktop' : 'mobile';
+    if (next === tierName) return;
+    tierName = next; count = COUNTS[tierName];
+    dir = FRAME_BASE + '/assets/frames/teardown/' + tierName;
+    frames = new Array(count); lastDrawn = -1;
+  }
+
+  function loadImage(src, noCors) {
+    return new Promise(function (res, rej) {
+      var im = new Image();
+      im.decoding = 'async';
+      /* Ask for CORS so the canvas stays untainted and readable
+         (getImageData / toDataURL). jsDelivr, S3 and GitHub Pages all send
+         access-control-allow-origin. A host that does not would make the
+         load fail outright, so retry once without it — a tainted canvas
+         still displays perfectly, it just cannot be read back. */
+      if (!noCors) im.crossOrigin = 'anonymous';
+      im.onload = function () { res(im); };
+      im.onerror = function () {
+        if (!noCors) { loadImage(src, true).then(res, rej); return; }
+        rej(new Error(src));
+      };
+      im.src = src;
+    });
+  }
+
+  function resize() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    lastDrawn = -1; draw(current, true);
+  }
+
+  function paint(img) {
+    var cw = canvas.width, ch = canvas.height;
+    ctx.fillStyle = '#07070a'; ctx.fillRect(0, 0, cw, ch);
+    if (!img) return;
+    var s = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
+    var w = img.naturalWidth * s, h = img.naturalHeight * s;
+    ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+  }
+
+  function nearest(i) {
+    if (frames[i]) return frames[i];
+    for (var d = 1; d < count; d++) {
+      if (frames[i - d]) return frames[i - d];
+      if (frames[i + d]) return frames[i + d];
+    }
+    return poster;
+  }
+
+  function draw(f, force) {
+    var i = clamp(Math.round(f), 0, count - 1);
+    if (i === lastDrawn && !force) return;
+    lastDrawn = i; paint(nearest(i));
+  }
+
+  var beats = [];
+  function buildBeats() {
+    overlay.innerHTML = '';
+    BEATS.forEach(function (b) {
+      var el = document.createElement('article');
+      el.className = 'r5x-beat' + (b.align === 'center' ? ' is-center' : '');
+      var h = '';
+      if (b.eyebrow) h += '<p class="r5x-eyebrow">' + b.eyebrow + '</p>';
+      if (b.title)   h += '<h2 class="r5x-title">' + b.title + '</h2>';
+      if (b.body)    h += '<p class="r5x-body">' + b.body + '</p>';
+      if (b.stats) {
+        h += '<dl class="r5x-stats">';
+        b.stats.forEach(function (s) { h += '<div><dt>' + s[0] + '</dt><dd>' + s[1] + '</dd></div>'; });
+        h += '</dl>';
+      }
+      if (b.cta) h += '<a class="r5x-cta" href="' + b.cta.href + '">' + b.cta.label + '</a>';
+      el.innerHTML = h;
+      overlay.appendChild(el);
+      beats.push({ el: el, from: b.from, to: b.to });
+    });
+  }
+
+  /* The closing beat holds instead of fading: its band ends at exactly 1.0,
+     so fading it would blink the copy and its CTA out at the bottom. */
+  function opacityFor(b, p) {
+    var last = b.to >= 1;
+    if (p <= b.from) return 0;
+    if (p >= b.to && !last) return 0;
+    var fade = (b.to - b.from) * 0.26;
+    return Math.min(1, (p - b.from) / fade, last ? Infinity : (b.to - p) / fade);
+  }
+
+  function updateBeats(p) {
+    beats.forEach(function (b) {
+      var o = opacityFor(b, p);
+      if (o === b.last) return;
+      b.last = o;
+      b.el.style.opacity = o;
+      b.el.style.transform = 'translate3d(0,' + ((1 - o) * 16).toFixed(1) + 'px,0)';
+      b.el.style.visibility = o < 0.01 ? 'hidden' : 'visible';
+    });
+  }
+
+  function progress() {
+    var travel = stage.offsetHeight - window.innerHeight;
+    if (travel <= 0) return 0;
+    return clamp(-stage.getBoundingClientRect().top / travel, 0, 1);
+  }
+
+  function tick() {
+    var d = target - current;
+    if (Math.abs(d) < 0.01) { current = target; running = false; }
+    else { current += d * SMOOTHING; requestAnimationFrame(tick); }
+    draw(current);
+  }
+
+  /* GHL nests content in flex containers, and an ancestor with
+     `overflow: hidden` silently kills `position: sticky`. Detect it once,
+     mid-section, and switch to fixed positioning if the pin is not holding. */
+  function checkSticky(p) {
+    if (stickyChecked || p < 0.15 || p > 0.85) return;
+    stickyChecked = true;
+    var pin = stage.querySelector('.r5x-pin');
+    var top = pin.getBoundingClientRect().top;
+    if (Math.abs(top) > 4) {
+      stage.classList.add('r5x-fixedfallback');
+      console.warn('[r5x] position:sticky is being blocked by an ancestor ' +
+        '(most likely overflow:hidden on a GHL row). Switched to fixed. ' +
+        'For a clean fix, put this block in a full-width one-column row.');
+    }
+  }
+
+  function onScroll() {
+    var p = progress();
+    checkSticky(p);
+    if (stage.classList.contains('r5x-fixedfallback')) {
+      var r = stage.getBoundingClientRect();
+      stage.classList.toggle('r5x-inview', r.top <= 0 && r.bottom >= window.innerHeight);
+    }
+    target = p * (count - 1);
+    updateBeats(p);
+    stage.style.setProperty('--r5x-p', p.toFixed(4));
+    if (!running) { running = true; requestAnimationFrame(tick); }
+  }
+
+  function ladder() {
+    var out = [];
+    for (var i = 0; i < count; i += LADDER_STEP) out.push(i);
+    if (out[out.length - 1] !== count - 1) out.push(count - 1);
+    return out;
+  }
+
+  function loadInto(i) {
+    return loadImage(dir + '/f' + String(i + 1).padStart(3, '0') + '.webp')
+      .then(function (im) { frames[i] = im; })
+      .catch(function () { /* one dropped frame is survivable */ });
+  }
+
+  function backfill() {
+    var pending = [];
+    for (var i = 0; i < count; i++) if (!frames[i]) pending.push(i);
+    function next() {
+      if (!pending.length) return Promise.resolve();
+      var here = Math.round(current), at = 0, best = Infinity;
+      for (var k = 0; k < pending.length; k++) {
+        var d = Math.abs(pending[k] - here);
+        if (d < best) { best = d; at = k; }
+      }
+      var idx = pending.splice(at, 1)[0];
+      return loadInto(idx).then(function () {
+        if (frames[idx] && Math.abs(idx - Math.round(current)) <= 1) draw(current, true);
+        return next();
+      });
+    }
+    var w = [];
+    for (var j = 0; j < CONCURRENCY; j++) w.push(next());
+    return Promise.all(w);
+  }
+
+  function start() {
+    if (started) return;
+    started = true;
+    resolveTier();
+    var lad = ladder(), done = 0;
+
+    loadImage(FRAME_BASE + '/assets/poster-teardown.webp')
+      .then(function (im) { poster = im; draw(current, true); })
+      .catch(function () {
+        console.error('[r5x] Could not load the poster from ' + FRAME_BASE +
+          ' — check FRAME_BASE is a PUBLIC https origin. A private GitHub repo will 404.');
+      })
+      .then(function () {
+        return Promise.all(lad.map(function (i) {
+          return loadInto(i).then(function () {
+            done++;
+            if (loader) {
+              loader.style.setProperty('--r5x-load', Math.round(done / lad.length * 100) + '%');
+            }
+            draw(current, true);
+          });
+        }));
+      })
+      .then(function () { stage.classList.add('is-ready'); return backfill(); });
+  }
+
+  function boot() {
+    resolveTier();
+    buildBeats();
+    resize();
+
+    /* RO not window.onresize: a canvas can have zero layout size at boot
+       (hidden tab, collapsed builder container) and becoming visible fires
+       no resize event, which would leave the bitmap at its 300x150 default. */
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(function () { resize(); if (!reduced) onScroll(); }).observe(canvas);
+    }
+    addEventListener('resize', function () { resize(); if (!reduced) onScroll(); });
+
+    if (reduced) {
+      beats.forEach(function (b) {
+        b.el.style.opacity = 1; b.el.style.visibility = 'visible';
+      });
+      resolveTier();
+      loadInto(Math.round(STATIC_AT * (count - 1))).then(function () {
+        resize(); draw(Math.round(STATIC_AT * (count - 1)), true);
+      });
+      return;
+    }
+
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    start();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>

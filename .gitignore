@@ -11,3 +11,6 @@ cannon rotate/
 .claude/
 .DS_Store
 Thumbs.db
+
+# Generated GHL test harness — rebuild with ghl/make-test-harness.py
+ghl/_test-harness.html
